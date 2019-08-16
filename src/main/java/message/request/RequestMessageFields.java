@@ -34,5 +34,6 @@ public final class RequestMessageFields {
     public static final String HASH = "hash";
     public static final String ID = "id";
     public static final String ADDRESS = "address";
+    public static final String LIST_TYPE = "listType";
 
 }

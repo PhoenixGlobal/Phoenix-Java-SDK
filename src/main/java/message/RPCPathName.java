@@ -35,6 +35,7 @@ public final class RPCPathName {
     public static final String GET_BLOCK_HEIGHT = "getblockheight";
     public static final String GET_BLOCK_INFO = "getLatesBlockInfo";
     public static final String GET_PRODUCER = "getProducer";
+    public static final String GET_PRODUCER_ALL = "getProducers";
     public static final String GET_PRODUCER_VOTE = "getProducerVotes";
     public static final String GET_PROPOSAL = "getProposal";
     public static final String GET_PROPOSAL_VOTE_ALL = "getAllProposalVote";

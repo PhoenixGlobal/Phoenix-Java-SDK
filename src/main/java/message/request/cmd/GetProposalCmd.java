@@ -21,26 +21,45 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package message.request;
+package message.request.cmd;
 
-import com.fasterxml.jackson.annotation.JsonSubTypes;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
-import lombok.NoArgsConstructor;
-import message.request.cmd.*;
+import lombok.*;
+import message.IProvideRPCPath;
+import message.RPCPathName;
+import message.request.ARequestMessage;
+import message.request.RequestMessageFields;
 
 /**
- * This class mainly provides abstraction for the {@link RequestMessageWriter}
+ * This class represents a RPC message to request a proposal by its hash
  * @author Artem Eger
  * @since 16.08.2019
  */
-@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "name")
-@JsonSubTypes({@JsonSubTypes.Type(value = GetBlockByHeightCmd.class),
-        @JsonSubTypes.Type(value = GetBlockByIdCmd.class),
-        @JsonSubTypes.Type(value = GetContractByIdCmd.class),
-        @JsonSubTypes.Type(value = GetProducerCmd.class),
-        @JsonSubTypes.Type(value = GetProducerAllVoterCmd.class),
-        @JsonSubTypes.Type(value = GetProposalCmd.class),
-        @JsonSubTypes.Type(value = GetProducersCmd.class),
-        @JsonSubTypes.Type(value = GetVotesCmd.class)})
+@Getter
+@Setter
+@ToString
+@EqualsAndHashCode(callSuper = false)
+@Builder
 @NoArgsConstructor
-public abstract class ARequestMessage {}
+@AllArgsConstructor
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "name")
+public class GetProposalCmd extends ARequestMessage implements IProvideRPCPath {
+
+    /**
+     * The target proposal hash to request
+     */
+    @JsonProperty(RequestMessageFields.ID)
+    private String proposalId;
+
+    /**
+     * @return target RPC Endpoint for this message
+     */
+    @JsonIgnore
+    @Override
+    public String getRpcPath() {
+        return RPCPathName.GET_PROPOSAL;
+    }
+
+}

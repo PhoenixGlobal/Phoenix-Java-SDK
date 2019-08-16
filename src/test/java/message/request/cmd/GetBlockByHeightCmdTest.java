@@ -1,5 +1,6 @@
 package message.request.cmd;
 
+import message.RPCPathName;
 import message.request.RequestMessageWriter;
 import org.junit.Test;
 
@@ -25,6 +26,12 @@ public class GetBlockByHeightCmdTest {
         final GetBlockByHeightCmd classUnderTest = new GetBlockByHeightCmd(1);
         final GetBlockByHeightCmd msg = (GetBlockByHeightCmd) writer.getRequestObjectFromString(validJsonString);
         assertEquals(classUnderTest, msg);
+    }
+
+    @Test
+    public void RPCEndpointTest(){
+        final GetBlockByHeightCmd classUnderTest = new GetBlockByHeightCmd(1);
+        assertEquals(RPCPathName.GET_BLOCK, classUnderTest.getRpcPath());
     }
 
 }
