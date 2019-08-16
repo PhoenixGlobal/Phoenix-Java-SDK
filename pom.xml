@@ -34,7 +34,8 @@
     <properties>
         <logback.version>1.2.3</logback.version>
         <lombock.version>1.18.8</lombock.version>
-        <jackson.version>2.9.8</jackson.version>
+        <jackson.version>2.9.9</jackson.version>
+        <jackson.databind.version>2.9.9.3</jackson.databind.version>
         <junit.version>4.12</junit.version>
     </properties>
 
