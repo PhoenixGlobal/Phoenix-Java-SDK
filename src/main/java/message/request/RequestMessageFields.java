@@ -24,12 +24,13 @@
 package message.request;
 
 /**
- * This class defines valid message field keys
+ * This class defines valid message field keys for {@link ARequestMessage}
  * @author Artem Eger
  * @since 16.08.2019
  */
 public final class RequestMessageFields {
 
     public static final String HEIGHT = "height";
+    public static final String HASH = "hash";
 
 }

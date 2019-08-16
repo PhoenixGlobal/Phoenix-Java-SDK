@@ -21,29 +21,45 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package message;
+package message.request.cmd;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import lombok.*;
+import message.IProvideRPCPath;
+import message.RPCPathName;
+import message.request.ARequestMessage;
+import message.request.RequestMessageFields;
 
 /**
- * This class provides valid RPC Path Endpoints 
+ * This class represents a RPC message to request a block by its hash
  * @author Artem Eger
  * @since 16.08.2019
  */
-public final class RPCPathName {
+@Getter
+@Setter
+@ToString
+@EqualsAndHashCode(callSuper = false)
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "name")
+public class GetBlockByIdCmd extends ARequestMessage implements IProvideRPCPath {
 
-    public static final String GET_BLOCK = "getblock";
-    public static final String GET_BLOCK_MULTIPLE = "getblocks";
-    public static final String GET_BLOCK_HEIGHT = "getblockheight";
-    public static final String GET_BLOCK_INFO = "getLatesBlockInfo";
-    public static final String GET_PRODUCER = "getProducer";
-    public static final String GET_PRODUCER_VOTE = "getProducerVotes";
-    public static final String GET_PROPOSAL = "getProposal";
-    public static final String GET_PROPOSAL_VOTE_ALL = "getAllProposalVote";
-    public static final String GET_PROPOSAL_ALL = "getAllProposal";
-    public static final String GET_AVG_GAS = "getAverageGasPrice";
-    public static final String GET_VOTE = "getVote";
-    public static final String SHOW_ACCOUNT = "showaccount";
-    public static final String GET_CONTRACT = "getContract";
-    public static final String SEND_RAW_TX = "sendrawtransaction";
-    public static final String SEND_RAW_TX_MULTIPLE = "sendrawtransactions";
+    /**
+     * The hash to request
+     */
+    @JsonProperty(RequestMessageFields.HASH)
+    @NonNull private String hash;
+
+    /**
+     * @return target RPC Endpoint for this message
+     */
+    @JsonIgnore
+    @Override
+    public String getRpcPath() {
+        return RPCPathName.GET_BLOCK;
+    }
 
 }

@@ -21,29 +21,35 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package message;
+package message.response;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.*;
 
 /**
- * This class provides valid RPC Path Endpoints 
+ * This class represents a RPC message execution response
  * @author Artem Eger
  * @since 16.08.2019
  */
-public final class RPCPathName {
+@Getter
+@Setter
+@ToString
+@EqualsAndHashCode(callSuper = false)
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+public class ExecResult {
 
-    public static final String GET_BLOCK = "getblock";
-    public static final String GET_BLOCK_MULTIPLE = "getblocks";
-    public static final String GET_BLOCK_HEIGHT = "getblockheight";
-    public static final String GET_BLOCK_INFO = "getLatesBlockInfo";
-    public static final String GET_PRODUCER = "getProducer";
-    public static final String GET_PRODUCER_VOTE = "getProducerVotes";
-    public static final String GET_PROPOSAL = "getProposal";
-    public static final String GET_PROPOSAL_VOTE_ALL = "getAllProposalVote";
-    public static final String GET_PROPOSAL_ALL = "getAllProposal";
-    public static final String GET_AVG_GAS = "getAverageGasPrice";
-    public static final String GET_VOTE = "getVote";
-    public static final String SHOW_ACCOUNT = "showaccount";
-    public static final String GET_CONTRACT = "getContract";
-    public static final String SEND_RAW_TX = "sendrawtransaction";
-    public static final String SEND_RAW_TX_MULTIPLE = "sendrawtransactions";
+    @JsonProperty(ResponseMessageFields.SUCCEED)
+    @NonNull private boolean succeed;
+
+    @JsonProperty(ResponseMessageFields.STATUS)
+    @NonNull private int status;
+
+    @JsonProperty(ResponseMessageFields.MESSAGE)
+    @NonNull private String message;
+
+    @JsonProperty(ResponseMessageFields.RESULT)
+    @NonNull private String result;
 
 }

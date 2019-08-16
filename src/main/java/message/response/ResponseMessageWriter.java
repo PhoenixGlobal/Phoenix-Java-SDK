@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package message.request;
+package message.response;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -29,12 +29,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
 
 /**
- * This class provides functionality to convert {@link ARequestMessage} to JSON
+ * This class provides functionality to convert {@link ExecResult} to JSON
  * Strings and vice versa
  * @author Artem Eger
  * @since 16.08.2019
  */
-public class RequestMessageWriter {
+public class ResponseMessageWriter {
 
     /**
      * {@link ObjectMapper}
@@ -44,33 +44,33 @@ public class RequestMessageWriter {
     /**
      * Default constructor
      */
-    public RequestMessageWriter(){
+    public ResponseMessageWriter(){
         this.mapper = new ObjectMapper();
     }
 
     /**
      * Constructor allowing for a custom mapper
      */
-    public RequestMessageWriter(ObjectMapper mapper){
+    public ResponseMessageWriter(ObjectMapper mapper){
         this.mapper = mapper;
     }
 
     /**
-     * Converts a JSON String to a {@link ARequestMessage}
+     * Converts a JSON String to a {@link ExecResult}
      * @param jsonString String to be converted
-     * @return a valid {@link ARequestMessage}
+     * @return a valid {@link ExecResult}
      */
-    public ARequestMessage getRequestObjectFromString(String jsonString) throws IOException {
-        return mapper.readValue(jsonString, ARequestMessage.class);
+    public ExecResult getExecResultFromString(String jsonString) throws IOException {
+        return mapper.readValue(jsonString, ExecResult.class);
     }
 
     /**
-     * Converts a {@link ARequestMessage} to a JSON String
-     * @param msg {@link ARequestMessage} to be converted
-     * @return String value of the {@link ARequestMessage}
+     * Converts a {@link ExecResult} to a JSON String
+     * @param result {@link ExecResult} to be converted
+     * @return String value of the {@link ExecResult}
      */
-    public String getStringFromRequestObject(ARequestMessage msg) throws JsonProcessingException {
-        return mapper.writer().writeValueAsString(msg);
+    public String getStringFromExecResult(ExecResult result) throws JsonProcessingException {
+        return mapper.writer().writeValueAsString(result);
     }
 
 }
