@@ -21,18 +21,45 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package message.request;
+package message.request.cmd;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import lombok.*;
+import message.IProvideRPCPath;
+import message.RPCPathName;
+import message.request.ARequestMessage;
+import message.request.RequestMessageFields;
 
 /**
- * This class defines valid message field keys for {@link ARequestMessage}
+ * This class represents a RPC message to request a producer by its hash
  * @author Artem Eger
  * @since 16.08.2019
  */
-public final class RequestMessageFields {
+@Getter
+@Setter
+@ToString
+@EqualsAndHashCode(callSuper = false)
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "name")
+public class GetProducerCmd extends ARequestMessage implements IProvideRPCPath {
 
-    public static final String HEIGHT = "height";
-    public static final String HASH = "hash";
-    public static final String ID = "id";
-    public static final String ADDRESS = "address";
+    /**
+     * The target producer address
+     */
+    @JsonProperty(RequestMessageFields.ADDRESS)
+    private String address;
+
+    /**
+     * @return target RPC Endpoint for this message
+     */
+    @JsonIgnore
+    @Override
+    public String getRpcPath() {
+        return RPCPathName.GET_PRODUCER;
+    }
 
 }

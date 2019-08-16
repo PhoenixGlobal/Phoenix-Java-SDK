@@ -21,8 +21,7 @@ public class GetBlocksByIdCmdTest {
 
     @Test
     public void validRPCMessageFromStringTest() throws IOException {
-        final String validJsonString = "{\"name\": \"GetBlockByIdCmd\"," +
-                " \"hash\" : \"5487b77c71dd2730b8537cd28580da7d0f93d90dcf6753de110646897807fecf\"}";
+        final String validJsonString = "{\"name\": \"GetBlockByIdCmd\", \"hash\" : \"5487b77c71dd2730b8537cd28580da7d0f93d90dcf6753de110646897807fecf\"}";
         final GetBlockByIdCmd classUnderTest = new GetBlockByIdCmd("5487b77c71dd2730b8537cd28580da7d0f93d90dcf6753de110646897807fecf");
         final GetBlockByIdCmd msg = (GetBlockByIdCmd) writer.getRequestObjectFromString(validJsonString);
         assertEquals(classUnderTest, msg);

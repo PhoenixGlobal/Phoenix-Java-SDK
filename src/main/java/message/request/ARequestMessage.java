@@ -28,6 +28,8 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import lombok.NoArgsConstructor;
 import message.request.cmd.GetBlockByHeightCmd;
 import message.request.cmd.GetBlockByIdCmd;
+import message.request.cmd.GetContractByIdCmd;
+import message.request.cmd.GetProducerCmd;
 
 /**
  * This class mainly provides abstraction for the {@link RequestMessageWriter}
@@ -36,6 +38,8 @@ import message.request.cmd.GetBlockByIdCmd;
  */
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "name")
 @JsonSubTypes({@JsonSubTypes.Type(value = GetBlockByHeightCmd.class),
-        @JsonSubTypes.Type(value = GetBlockByIdCmd.class)})
+        @JsonSubTypes.Type(value = GetBlockByIdCmd.class),
+        @JsonSubTypes.Type(value = GetContractByIdCmd.class),
+        @JsonSubTypes.Type(value = GetProducerCmd.class)})
 @NoArgsConstructor
 public abstract class ARequestMessage {}
