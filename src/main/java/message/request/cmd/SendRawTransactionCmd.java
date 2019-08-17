@@ -49,7 +49,7 @@ public class SendRawTransactionCmd extends ARequestMessage {
      * The transaction bytes
      */
     @JsonProperty(RequestMessageFields.RAW_TX)
-    private byte [] tx;
+    @NonNull private byte [] tx;
 
     /**
      * @return target RPC Endpoint for this message

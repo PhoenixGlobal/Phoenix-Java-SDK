@@ -49,7 +49,7 @@ public class GetProposalCmd extends ARequestMessage {
      * The target proposal hash to request
      */
     @JsonProperty(RequestMessageFields.ID)
-    private String proposalId;
+    @NonNull private String proposalId;
 
     /**
      * @return target RPC Endpoint for this message

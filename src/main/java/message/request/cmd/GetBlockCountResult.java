@@ -48,7 +48,7 @@ public class GetBlockCountResult extends ARequestMessage {
      * The requested count
      */
     @JsonProperty(RequestMessageFields.COUNT)
-    private long count;
+    @NonNull private long count;
 
     /**
      * This message seems to not be implemented yet

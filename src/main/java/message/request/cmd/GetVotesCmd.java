@@ -49,7 +49,7 @@ public class GetVotesCmd extends ARequestMessage {
      * The target vote hash to request
      */
     @JsonProperty(RequestMessageFields.ADDRESS)
-    private String voteId;
+    @NonNull private String voteId;
 
     /**
      * @return target RPC Endpoint for this message

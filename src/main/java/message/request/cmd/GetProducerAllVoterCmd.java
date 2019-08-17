@@ -26,7 +26,7 @@ public class GetProducerAllVoterCmd extends ARequestMessage {
      * The target producer hash to request
      */
     @JsonProperty(RequestMessageFields.ADDRESS)
-    private String address;
+    @NonNull private String address;
 
     /**
      * @return target RPC Endpoint for this message

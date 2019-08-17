@@ -49,7 +49,7 @@ public class GetAccountCmd extends ARequestMessage {
      * The account hash to request
      */
     @JsonProperty(RequestMessageFields.ADDRESS)
-    private String accountId;
+    @NonNull private String accountId;
 
     /**
      * @return target RPC Endpoint for this message

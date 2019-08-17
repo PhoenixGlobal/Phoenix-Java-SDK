@@ -49,7 +49,7 @@ public class GetProducerCmd extends ARequestMessage {
      * The target producer address
      */
     @JsonProperty(RequestMessageFields.ADDRESS)
-    private String address;
+    @NonNull private String address;
 
     /**
      * @return target RPC Endpoint for this message

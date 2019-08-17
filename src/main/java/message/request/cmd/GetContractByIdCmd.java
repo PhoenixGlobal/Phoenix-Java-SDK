@@ -49,7 +49,7 @@ public class GetContractByIdCmd extends ARequestMessage {
      * The contract hash to request
      */
     @JsonProperty(RequestMessageFields.ID)
-    public String contractId;
+    @NonNull public String contractId;
 
     /**
      * @return target RPC Endpoint for this message

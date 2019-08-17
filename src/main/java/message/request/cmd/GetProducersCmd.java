@@ -49,7 +49,7 @@ public class GetProducersCmd extends ARequestMessage {
      * The requested list type
      */
     @JsonProperty(RequestMessageFields.LIST_TYPE)
-    private String listType;
+    @NonNull private String listType;
 
     /**
      * @return target RPC Endpoint for this message
