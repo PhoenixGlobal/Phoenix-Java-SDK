@@ -26,7 +26,8 @@ public class TransactionTest {
                 .executeTime(Instant.now().toEpochMilli())
                 .build();
         final String jsonString = tx.getAsJsonString();
-        final Transaction tx2 = (Transaction) tx.getObjectFromJsonString(jsonString);
+        Transaction tx2 = new Transaction();
+        tx2 = (Transaction) tx2.getObjectFromJsonString(jsonString);
         assertEquals(tx, tx2);
     }
 
