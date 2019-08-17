@@ -74,7 +74,7 @@ public class RequestCallerService {
      * @return string of the content
      * @throws Exception on InputReader
      */
-    private static String contentToString(HttpURLConnection connection) throws Exception {
+    private String contentToString(HttpURLConnection connection) throws Exception {
         StringBuilder content = new StringBuilder();
         try (BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()))) {
             String line;
