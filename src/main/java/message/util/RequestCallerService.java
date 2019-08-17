@@ -63,7 +63,7 @@ public class RequestCallerService {
         con.setRequestProperty(PROPERTY_TYPE, JSON_TYPE);
         con.setDoOutput(true);
         try(OutputStream out = con.getOutputStream()) {
-            out.write(requestMessageWriter.getStringFromRequestObject(msg).getBytes());
+            out.write(requestMessageWriter.getBytesFromRequestObject(msg));
         }
         return responseMessageWriter.getExecResultFromString(contentToString(con));
     }

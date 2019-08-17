@@ -73,4 +73,13 @@ public class RequestMessageWriter {
         return mapper.writer().writeValueAsString(msg);
     }
 
+    /**
+     * Converts a {@link ARequestMessage} to a byte array
+     * @param msg {@link ARequestMessage} to be converted
+     * @return byte array of the {@link ARequestMessage}
+     */
+    public byte[] getBytesFromRequestObject(ARequestMessage msg) throws JsonProcessingException {
+        return mapper.writer().writeValueAsBytes(msg);
+    }
+
 }
