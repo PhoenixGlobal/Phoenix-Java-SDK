@@ -24,8 +24,9 @@
 package message.request.cmd;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import message.IProvideRPCPath;
-import message.RPCPathName;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import lombok.*;
+import message.request.RPCPathName;
 import message.request.ARequestMessage;
 
 /**
@@ -34,7 +35,13 @@ import message.request.ARequestMessage;
  * @author Artem Eger
  * @since 17.08.2019
  */
-public class GetAllProposalVotesCmd extends ARequestMessage implements IProvideRPCPath {
+@Getter
+@Setter
+@ToString
+@EqualsAndHashCode(callSuper = false)
+@NoArgsConstructor
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "name")
+public class GetAllProposalVotesCmd extends ARequestMessage {
 
     /**
      * @return target RPC Endpoint for this message

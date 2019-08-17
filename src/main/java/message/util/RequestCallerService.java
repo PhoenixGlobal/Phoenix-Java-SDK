@@ -23,7 +23,6 @@
  */
 package message.util;
 
-import message.IProvideRPCPath;
 import message.request.ARequestMessage;
 import message.request.RequestMessageWriter;
 import message.response.ExecResult;
@@ -53,18 +52,18 @@ public class RequestCallerService {
     /**
      * This method creates a POST request without authorization
      * @param urlString url of the RPC server
-     * @param msg {@link IProvideRPCPath} type message to pass
+     * @param msg {@link ARequestMessage} type message to pass
      * @return {@link ExecResult} object response from the RPC server
      * @throws Exception on URL connection
      */
-    public ExecResult postRequest(String urlString, IProvideRPCPath msg) throws Exception {
+    public ExecResult postRequest(String urlString, ARequestMessage msg) throws Exception {
         URL url = new URL(urlString + "/" + msg.getRpcPath());
         HttpURLConnection con = (HttpURLConnection) url.openConnection();
         con.setRequestMethod(METHOD_POST);
         con.setRequestProperty(PROPERTY_TYPE, JSON_TYPE);
         con.setDoOutput(true);
         try(OutputStream out = con.getOutputStream()) {
-            out.write(requestMessageWriter.getStringFromRequestObject((ARequestMessage)msg).getBytes());
+            out.write(requestMessageWriter.getStringFromRequestObject(msg).getBytes());
         }
         return responseMessageWriter.getExecResultFromString(contentToString(con));
     }

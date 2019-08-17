@@ -26,8 +26,7 @@ package message.request.cmd;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import lombok.*;
-import message.IProvideRPCPath;
-import message.RPCPathName;
+import message.request.RPCPathName;
 import message.request.ARequestMessage;
 
 /**
@@ -41,7 +40,7 @@ import message.request.ARequestMessage;
 @EqualsAndHashCode(callSuper = false)
 @NoArgsConstructor
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "name")
-public class GetBlockCountCmd extends ARequestMessage implements IProvideRPCPath {
+public class GetBlockCountCmd extends ARequestMessage {
 
     /**
      * @return target RPC Endpoint for this message

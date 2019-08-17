@@ -1,6 +1,6 @@
 package message.request.cmd;
 
-import message.RPCPathName;
+import message.request.RPCPathName;
 import message.request.RequestMessageWriter;
 import org.junit.Test;
 

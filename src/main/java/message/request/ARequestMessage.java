@@ -23,6 +23,7 @@
  */
 package message.request;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import lombok.NoArgsConstructor;
@@ -51,4 +52,9 @@ import message.request.cmd.*;
         @JsonSubTypes.Type(value = GetLatestBlockInfoCmd.class),
         @JsonSubTypes.Type(value = SendRawTransactionCmd.class)})
 @NoArgsConstructor
-public abstract class ARequestMessage {}
+public abstract class ARequestMessage {
+
+    @JsonIgnore
+    public abstract String getRpcPath();
+
+}

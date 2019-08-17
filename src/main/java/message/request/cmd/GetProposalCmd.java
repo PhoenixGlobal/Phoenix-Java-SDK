@@ -27,8 +27,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import lombok.*;
-import message.IProvideRPCPath;
-import message.RPCPathName;
+import message.request.RPCPathName;
 import message.request.ARequestMessage;
 import message.request.RequestMessageFields;
 
@@ -41,11 +40,10 @@ import message.request.RequestMessageFields;
 @Setter
 @ToString
 @EqualsAndHashCode(callSuper = false)
-@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "name")
-public class GetProposalCmd extends ARequestMessage implements IProvideRPCPath {
+public class GetProposalCmd extends ARequestMessage {
 
     /**
      * The target proposal hash to request

@@ -1,6 +1,6 @@
 package message.request.cmd;
 
-import message.RPCPathName;
+import message.request.RPCPathName;
 import org.junit.Test;
 
 import static junit.framework.TestCase.assertEquals;
