@@ -21,22 +21,28 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package message.request;
+package message.request.cmd;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import message.IProvideRPCPath;
+import message.RPCPathName;
+import message.request.ARequestMessage;
 
 /**
- * This class defines valid message field keys for {@link ARequestMessage}
+ * This class represents a RPC message to request all votes for current proposals
+ * gas price
  * @author Artem Eger
- * @since 16.08.2019
+ * @since 17.08.2019
  */
-public final class RequestMessageFields {
+public class GetAllProposalVotesCmd extends ARequestMessage implements IProvideRPCPath {
 
-    public static final String HEIGHT = "height";
-    public static final String HASH = "hash";
-    public static final String ID = "id";
-    public static final String ADDRESS = "address";
-    public static final String LIST_TYPE = "listType";
-    public static final String COUNT = "count";
-    public static final String RAW_TX = "rawTx";
-    public static final String MULTIPLE_TX = "txs";
+    /**
+     * @return target RPC Endpoint for this message
+     */
+    @JsonIgnore
+    @Override
+    public String getRpcPath() {
+        return RPCPathName.GET_PROPOSAL_VOTE_ALL;
+    }
 
 }

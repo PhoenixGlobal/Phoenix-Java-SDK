@@ -41,6 +41,14 @@ import message.request.cmd.*;
         @JsonSubTypes.Type(value = GetProducerAllVoterCmd.class),
         @JsonSubTypes.Type(value = GetProposalCmd.class),
         @JsonSubTypes.Type(value = GetProducersCmd.class),
-        @JsonSubTypes.Type(value = GetVotesCmd.class)})
+        @JsonSubTypes.Type(value = GetVotesCmd.class),
+        @JsonSubTypes.Type(value = GetAccountCmd.class),
+        @JsonSubTypes.Type(value = GetAllProposalCmd.class),
+        @JsonSubTypes.Type(value = GetAllProposalVotesCmd.class),
+        @JsonSubTypes.Type(value = GetBlockCountCmd.class),
+        @JsonSubTypes.Type(value = GetBlockCountResult.class),
+        @JsonSubTypes.Type(value = GetBlocksCmd.class),
+        @JsonSubTypes.Type(value = GetLatestBlockInfoCmd.class),
+        @JsonSubTypes.Type(value = SendRawTransactionCmd.class)})
 @NoArgsConstructor
 public abstract class ARequestMessage {}
