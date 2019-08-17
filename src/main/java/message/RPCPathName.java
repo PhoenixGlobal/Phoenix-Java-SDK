@@ -45,6 +45,5 @@ public final class RPCPathName {
     public static final String SHOW_ACCOUNT = "showaccount";
     public static final String GET_CONTRACT = "getContract";
     public static final String SEND_RAW_TX = "sendrawtransaction";
-    public static final String SEND_RAW_TX_MULTIPLE = "sendrawtransactions";
 
 }
