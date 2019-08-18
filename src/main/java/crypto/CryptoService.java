@@ -28,6 +28,9 @@ import org.bouncycastle.cert.X509CertificateHolder;
 import org.bouncycastle.cert.X509v3CertificateBuilder;
 import org.bouncycastle.cert.jcajce.JcaX509CertificateConverter;
 import org.bouncycastle.cert.jcajce.JcaX509v3CertificateBuilder;
+import org.bouncycastle.crypto.digests.SHA256Digest;
+import org.bouncycastle.crypto.signers.ECDSASigner;
+import org.bouncycastle.crypto.signers.HMacDSAKCalculator;
 import org.bouncycastle.jcajce.provider.digest.Keccak;
 import org.bouncycastle.jcajce.provider.digest.RIPEMD160;
 import org.bouncycastle.jcajce.provider.digest.SHA256;
@@ -60,7 +63,7 @@ public final class CryptoService {
     private static final String EC_CURVE = "secp256r1";
     private static final String ALGORITHM = "ECDSA";
     private static final String PROVIDER = "BC";
-    private static final String SIGNER_ALOGORITHM = "SHA256withECDSA";
+    private static final String SIGNER_ALGORITHM = "SHA256withECDSA";
 
     private final MessageDigest ripeMd160 = new RIPEMD160.Digest();
     private final MessageDigest sha256 = new SHA256.Digest();
@@ -97,14 +100,14 @@ public final class CryptoService {
     }
 
     public byte[] getSignature(PrivateKey privateKey, byte[] data) throws Exception {
-        Signature signature = Signature.getInstance(ALGORITHM, PROVIDER);
+        Signature signature = Signature.getInstance(SIGNER_ALGORITHM, PROVIDER);
         signature.initSign(privateKey);
         signature.update(data);
         return signature.sign();
     }
 
     public boolean verifySignature(PublicKey publicKey, byte[] data, byte[] signatureBytes) throws Exception {
-        Signature signature = Signature.getInstance(ALGORITHM, PROVIDER);
+        Signature signature = Signature.getInstance(SIGNER_ALGORITHM, PROVIDER);
         signature.initVerify(publicKey);
         signature.update(data);
         return signature.verify(signatureBytes);
@@ -131,7 +134,7 @@ public final class CryptoService {
                 validFrom, validUntil,
                 new X500Name(ROOTNAME),
                 keyPair.getPublic());
-        ContentSigner signer = new JcaContentSignerBuilder(SIGNER_ALOGORITHM).build(keyPair.getPrivate());
+        ContentSigner signer = new JcaContentSignerBuilder(SIGNER_ALGORITHM).build(keyPair.getPrivate());
         X509CertificateHolder certHolder = builder.build(signer);
         X509Certificate cert = new JcaX509CertificateConverter().setProvider(PROVIDER).getCertificate(certHolder);
         cert.verify(keyPair.getPublic());
