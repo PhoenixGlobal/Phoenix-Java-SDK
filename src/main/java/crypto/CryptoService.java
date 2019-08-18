@@ -52,7 +52,7 @@ import java.util.Date;
  * @author Artem Eger
  * @since 18.08.2019
  */
-public class CryptoService {
+public final class CryptoService {
 
     private static final String KEYSTORE_FORMAT = "UBER";
     private static final String ROOTNAME = "CN=apex-network.com";
@@ -64,7 +64,7 @@ public class CryptoService {
 
     private final MessageDigest ripeMd160 = new RIPEMD160.Digest();
     private final MessageDigest sha256 = new SHA256.Digest();
-    private final Keccak.Digest256 keccak256 = new Keccak.Digest256();
+    private final MessageDigest keccak256 = new Keccak.Digest256();
 
     static {
         Security.addProvider(new BouncyCastleProvider());
