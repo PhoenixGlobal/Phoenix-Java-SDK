@@ -28,16 +28,12 @@ import org.bouncycastle.cert.X509CertificateHolder;
 import org.bouncycastle.cert.X509v3CertificateBuilder;
 import org.bouncycastle.cert.jcajce.JcaX509CertificateConverter;
 import org.bouncycastle.cert.jcajce.JcaX509v3CertificateBuilder;
-import org.bouncycastle.crypto.digests.SHA256Digest;
-import org.bouncycastle.crypto.signers.ECDSASigner;
-import org.bouncycastle.crypto.signers.HMacDSAKCalculator;
 import org.bouncycastle.jcajce.provider.digest.Keccak;
 import org.bouncycastle.jcajce.provider.digest.RIPEMD160;
 import org.bouncycastle.jcajce.provider.digest.SHA256;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.bouncycastle.operator.ContentSigner;
 import org.bouncycastle.operator.jcajce.JcaContentSignerBuilder;
-import org.bouncycastle.util.encoders.Hex;
 
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -119,10 +115,6 @@ public final class CryptoService {
         return factory.generatePublic(x509EncodedKeySpec);
     }
 
-    public String getRawKeyFromPrivateKey(PrivateKey privateKey) {
-        return getSHA256(privateKey.getEncoded());
-    }
-
     private X509Certificate generateCertificate(KeyPair keyPair) throws Exception {
         Calendar calendar = Calendar.getInstance();
         Date validFrom = calendar.getTime();
@@ -141,34 +133,28 @@ public final class CryptoService {
         return cert;
     }
 
-    public String getRIPEMD160(byte [] bytes) {
-        byte[] hash = ripeMd160.digest(bytes);
-        return new String(Hex.encode(hash));
+    public byte[] getRIPEMD160(byte [] bytes) {
+        return ripeMd160.digest(sha256.digest(bytes));
     }
 
-    public String getRIPEMD160(String str) {
-        byte[] hash = ripeMd160.digest(str.getBytes());
-        return new String(Hex.encode(hash));
+    public byte [] getRIPEMD160(String str) {
+        return ripeMd160.digest(sha256.digest(str.getBytes()));
     }
 
-    public String getSHA256(byte [] bytes) {
-        byte[] hash = sha256.digest(bytes);
-        return new String(Hex.encode(hash));
+    public byte[] getSHA256(byte [] bytes) {
+        return sha256.digest(sha256.digest(bytes));
     }
 
-    public String getSHA256(String str) {
-        byte[] hash = sha256.digest(str.getBytes());
-        return new String(Hex.encode(hash));
+    public byte[] getSHA256(String str) {
+        return sha256.digest(sha256.digest(str.getBytes()));
     }
 
-    public String getKeccak(byte [] bytes){
-        byte[] hashbytes = keccak256.digest(bytes);
-        return new String(Hex.encode(hashbytes));
+    public byte[] getKeccak(byte [] bytes){
+        return keccak256.digest(sha256.digest(bytes));
     }
 
-    public String getKeccak(String str){
-        byte[] hashbytes = keccak256.digest(str.getBytes());
-        return new String(Hex.encode(hashbytes));
+    public byte[] getKeccak(String str){
+        return keccak256.digest(sha256.digest(str.getBytes()));
     }
 
 }
