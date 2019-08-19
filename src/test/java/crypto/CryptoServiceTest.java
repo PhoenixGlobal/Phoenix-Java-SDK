@@ -1,25 +1,20 @@
 package crypto;
 
-import org.bouncycastle.asn1.eac.ECDSAPublicKey;
 import org.bouncycastle.asn1.sec.SECNamedCurves;
 import org.bouncycastle.asn1.x9.X9ECParameters;
-import org.bouncycastle.jcajce.provider.asymmetric.ec.BCECPublicKey;
 import org.bouncycastle.math.ec.ECPoint;
-import org.bouncycastle.util.Arrays;
 import org.bouncycastle.util.encoders.Hex;
 import org.junit.After;
 import org.junit.Test;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.math.BigInteger;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.security.KeyPair;
 import java.security.PublicKey;
 import java.security.SecureRandom;
 import java.security.interfaces.ECPrivateKey;
-import java.security.interfaces.ECPublicKey;
 
 import static junit.framework.TestCase.assertEquals;
 import static junit.framework.TestCase.assertTrue;
@@ -82,19 +77,27 @@ public class CryptoServiceTest {
         String pubKeyComp = Hex.toHexString(point.getEncoded(true));
         String pubKeyScript = "21" + pubKeyComp + "ac";
         String scriptHash = Hex.toHexString(CryptoService.getRIPEMD160(Hex.decode(pubKeyScript)));
-        byte [] pref = "0548".getBytes();
+        byte [] prefCPX = Hex.decode("0548");
+        byte [] prefNEO = Hex.decode("17");
         byte [] postfix = Hex.decode(scriptHash);
         byte [] adbytes;
         try(ByteArrayOutputStream out = new ByteArrayOutputStream()){
-            out.write(pref);
+            out.write(prefCPX);
             out.write(postfix);
             adbytes = out.toByteArray();
+        }
+        byte [] adbytes2;
+        try(ByteArrayOutputStream out = new ByteArrayOutputStream()){
+            out.write(prefNEO);
+            out.write(postfix);
+            adbytes2 = out.toByteArray();
         }
         System.out.println("priv raw: " + privKeyRaw);
         System.out.println("pub compressed: " + pubKeyComp);
         System.out.println("pub key script: " + pubKeyScript);
         System.out.println("pub hash160: " + scriptHash);
-        System.out.println("Address CPX: ");
+        System.out.println("Address CPX: " + Base58CPX.encodeChecked(adbytes));
+        System.out.println("Address NEO: " + Base58CPX.encodeChecked(adbytes2));
     }
 
     @After
