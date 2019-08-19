@@ -10,6 +10,7 @@ import org.bouncycastle.util.encoders.Hex;
 import org.junit.After;
 import org.junit.Test;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.math.BigInteger;
 import java.nio.file.Files;
@@ -77,13 +78,23 @@ public class CryptoServiceTest {
         priv.getS();
         X9ECParameters params = SECNamedCurves.getByName("secp256r1");
         ECPoint point = params.getG().multiply(priv.getS());
-        String privKeyRaw = new String(Hex.encode(priv.getS().toByteArray()));
-        String pubKeyComp = new String(Hex.encode(point.getEncoded(true)));
+        String privKeyRaw = Hex.toHexString(priv.getS().toByteArray());
+        String pubKeyComp = Hex.toHexString(point.getEncoded(true));
         String pubKeyScript = "21" + pubKeyComp + "ac";
+        String scriptHash = Hex.toHexString(CryptoService.getRIPEMD160(Hex.decode(pubKeyScript)));
+        byte [] pref = "0548".getBytes();
+        byte [] postfix = Hex.decode(scriptHash);
+        byte [] adbytes;
+        try(ByteArrayOutputStream out = new ByteArrayOutputStream()){
+            out.write(pref);
+            out.write(postfix);
+            adbytes = out.toByteArray();
+        }
         System.out.println("priv raw: " + privKeyRaw);
         System.out.println("pub compressed: " + pubKeyComp);
         System.out.println("pub key script: " + pubKeyScript);
-        System.out.println(classUnderTest.getRIPEMD160(pubKeyScript).length);
+        System.out.println("pub hash160: " + scriptHash);
+        System.out.println("Address CPX: ");
     }
 
     @After

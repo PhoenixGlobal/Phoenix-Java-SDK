@@ -61,9 +61,9 @@ public final class CryptoService {
     private static final String PROVIDER = "BC";
     private static final String SIGNER_ALGORITHM = "SHA256withECDSA";
 
-    private final MessageDigest ripeMd160 = new RIPEMD160.Digest();
-    private final MessageDigest sha256 = new SHA256.Digest();
-    private final MessageDigest keccak256 = new Keccak.Digest256();
+    private static final MessageDigest ripeMd160 = new RIPEMD160.Digest();
+    private static final MessageDigest sha256 = new SHA256.Digest();
+    private static final MessageDigest keccak256 = new Keccak.Digest256();
 
     static {
         Security.addProvider(new BouncyCastleProvider());
@@ -133,27 +133,27 @@ public final class CryptoService {
         return cert;
     }
 
-    public byte[] getRIPEMD160(byte [] bytes) {
+    public static byte[] getRIPEMD160(byte [] bytes) {
         return ripeMd160.digest(sha256.digest(bytes));
     }
 
-    public byte [] getRIPEMD160(String str) {
+    public static byte [] getRIPEMD160(String str) {
         return ripeMd160.digest(sha256.digest(str.getBytes()));
     }
 
-    public byte[] getSHA256(byte [] bytes) {
+    public static byte[] getSHA256(byte [] bytes) {
         return sha256.digest(sha256.digest(bytes));
     }
 
-    public byte[] getSHA256(String str) {
+    public static byte[] getSHA256(String str) {
         return sha256.digest(sha256.digest(str.getBytes()));
     }
 
-    public byte[] getKeccak(byte [] bytes){
+    public static byte[] getKeccak(byte [] bytes){
         return keccak256.digest(sha256.digest(bytes));
     }
 
-    public byte[] getKeccak(String str){
+    public static byte[] getKeccak(String str){
         return keccak256.digest(sha256.digest(str.getBytes()));
     }
 
