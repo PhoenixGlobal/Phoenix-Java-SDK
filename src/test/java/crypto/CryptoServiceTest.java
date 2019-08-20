@@ -35,10 +35,24 @@ public class CryptoServiceTest {
     }
 
     @Test(expected = Exception.class)
+    public void LoadKeyStoreWithWrongKeystore() throws Exception {
+        classUnderTest.generateKeystore(keyStoreName, keyName, password);
+        assertTrue(Files.exists(Paths.get(keyStoreName + ".ubr")));
+        classUnderTest.loadKeyPairFromKeyStore("keystore.ubr",keyName, password);
+    }
+
+@Test(expected = Exception.class)
+    public void LoadKeyStoreWithWrongKeyname() throws Exception {
+        classUnderTest.generateKeystore(keyStoreName, keyName, password);
+        assertTrue(Files.exists(Paths.get(keyStoreName + ".ubr")));
+        classUnderTest.loadKeyPairFromKeyStore(keyStoreName + ".ubr", "wallet2", password);
+    }
+
+@Test(expected = Exception.class)
     public void LoadKeyStoreWithWrongPass() throws Exception {
         classUnderTest.generateKeystore(keyStoreName, keyName, password);
         assertTrue(Files.exists(Paths.get(keyStoreName + ".ubr")));
-        classUnderTest.loadKeyPairFromKeyStore("keystore.ubr", "wallet2","this");
+        classUnderTest.loadKeyPairFromKeyStore(keyStoreName + ".ubr", keyName,"this");
     }
 
     @Test
