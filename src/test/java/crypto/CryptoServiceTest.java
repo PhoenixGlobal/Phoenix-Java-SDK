@@ -88,6 +88,9 @@ public class CryptoServiceTest {
         X9ECParameters params = SECNamedCurves.getByName("secp256r1");
         ECPoint point = params.getG().multiply(priv.getS());
         String privKeyRaw = Hex.toHexString(priv.getS().toByteArray());
+        if(privKeyRaw.startsWith("00")){
+            privKeyRaw = privKeyRaw.substring(2);
+        }
         String pubKeyComp = Hex.toHexString(point.getEncoded(true));
         String pubKeyScript = "21" + pubKeyComp + "ac";
         String scriptHash = Hex.toHexString(CryptoService.getRIPEMD160(Hex.decode(pubKeyScript)));
@@ -106,7 +109,15 @@ public class CryptoServiceTest {
             out.write(postfix);
             adbytes2 = out.toByteArray();
         }
+        byte [] wifPrivAr;
+        try(ByteArrayOutputStream out = new ByteArrayOutputStream()) {
+            out.write(0x80);
+            out.write(Hex.decode(privKeyRaw));
+            out.write(0x01);
+            wifPrivAr = out.toByteArray();
+        }
         System.out.println("priv raw: " + privKeyRaw);
+        System.out.println("priv key wif: " + Base58CPX.encodeChecked(wifPrivAr));
         System.out.println("pub compressed: " + pubKeyComp);
         System.out.println("pub key script: " + pubKeyScript);
         System.out.println("pub hash160: " + scriptHash);

@@ -35,20 +35,20 @@ import java.util.Arrays;
 public final class Base58CPX {
 
     private final static String ALPHABET = "123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz";
-    private final static String LEAD_CHAR = "A";
     private final static BigInteger BASE = BigInteger.valueOf(58L);
 
     public static String encode(byte [] bytes) {
-       BigInteger bi = new BigInteger(1, bytes);
-       StringBuilder sb = new StringBuilder();
-       if (bi.compareTo(BigInteger.ZERO) > 0) {
-           while (bi.compareTo(BASE) >= 0){
-               BigInteger mod = bi.mod(BASE);
-               sb.append(ALPHABET.charAt(mod.intValue()));
-               bi = (bi.subtract(mod)).divide(BASE);
-           }
-       }
-       return LEAD_CHAR + sb.reverse().toString();
+        BigInteger value = new BigInteger(1, bytes);
+        StringBuilder sb = new StringBuilder();
+        if (value.compareTo(BigInteger.ZERO) > 0) {
+            while (value.compareTo(BASE) >= 0) {
+                BigInteger mod = value.mod(BASE);
+                sb.insert(0, ALPHABET.charAt(mod.intValue()));
+                value = (value.subtract(mod)).divide(BASE);
+            }
+        }
+        sb.insert(0, ALPHABET.charAt(value.intValue()));
+        return sb.toString();
     }
 
     public static String encodeChecked(byte[] payload) throws Exception {
