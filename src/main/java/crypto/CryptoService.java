@@ -28,10 +28,17 @@ import org.bouncycastle.cert.X509CertificateHolder;
 import org.bouncycastle.cert.X509v3CertificateBuilder;
 import org.bouncycastle.cert.jcajce.JcaX509CertificateConverter;
 import org.bouncycastle.cert.jcajce.JcaX509v3CertificateBuilder;
+import org.bouncycastle.jcajce.provider.asymmetric.ec.BCECPrivateKey;
 import org.bouncycastle.jcajce.provider.digest.Keccak;
 import org.bouncycastle.jcajce.provider.digest.RIPEMD160;
 import org.bouncycastle.jcajce.provider.digest.SHA256;
+import org.bouncycastle.jce.ECNamedCurveTable;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
+
+import org.bouncycastle.jce.spec.ECNamedCurveParameterSpec;
+import org.bouncycastle.jce.spec.ECNamedCurveSpec;
+import org.bouncycastle.jce.spec.ECPublicKeySpec;
+import org.bouncycastle.math.ec.ECPoint;
 import org.bouncycastle.operator.ContentSigner;
 import org.bouncycastle.operator.jcajce.JcaContentSignerBuilder;
 
@@ -41,7 +48,10 @@ import java.io.InputStream;
 import java.math.BigInteger;
 import java.security.*;
 import java.security.cert.X509Certificate;
+import java.security.interfaces.ECPrivateKey;
+import java.security.interfaces.ECPublicKey;
 import java.security.spec.ECGenParameterSpec;
+import java.security.spec.ECPrivateKeySpec;
 import java.security.spec.X509EncodedKeySpec;
 import java.util.Calendar;
 import java.util.Date;
@@ -74,6 +84,10 @@ public final class CryptoService {
         KeyPairGenerator g = KeyPairGenerator.getInstance(ALGORITHM, PROVIDER);
         g.initialize(ecGenSpec, new SecureRandom());
         final KeyPair keyPair = g.generateKeyPair();
+        keyPairToKeyStore(keyStoreName, password, keyName, keyPair);
+    }
+
+    public void keyPairToKeyStore(String keyStoreName, String password, String keyName, KeyPair keyPair) throws Exception {
         KeyStore keyStore = KeyStore.getInstance(KEYSTORE_FORMAT);
         keyStore.load(null, password.toCharArray());
         X509Certificate[] certificateChain = new X509Certificate[1];
@@ -82,6 +96,22 @@ public final class CryptoService {
         try (FileOutputStream fos = new FileOutputStream(keyStoreName + KEYSTORE_FILE_FORMAT)) {
             keyStore.store(fos, password.toCharArray());
         }
+    }
+
+    public void generateKeyStoreFromRawBytes(String keyStoreName, String password, String keyName, byte [] bytes) throws Exception {
+        final ECNamedCurveParameterSpec ecSpec = ECNamedCurveTable.getParameterSpec(EC_CURVE);
+        final ECNamedCurveSpec params = new ECNamedCurveSpec(EC_CURVE, ecSpec.getCurve(), ecSpec.getG(), ecSpec.getN());
+        final KeyFactory kf = KeyFactory.getInstance(ALGORITHM, PROVIDER);
+        final ECPrivateKeySpec ecPrivateKeySpec = new ECPrivateKeySpec(new BigInteger(1, bytes), params);
+        final ECPrivateKey privateKey = (ECPrivateKey) kf.generatePrivate(ecPrivateKeySpec);
+        final BCECPrivateKey bcec = (BCECPrivateKey) privateKey;
+        final ECPoint Q = ecSpec.getG().multiply(bcec.getD());
+        final byte[] publicBytes = Q.getEncoded(false);
+        final ECPoint point = ecSpec.getCurve().decodePoint(publicBytes);
+        final ECPublicKeySpec pubSpec = new ECPublicKeySpec(point, ecSpec);
+        final ECPublicKey publicKey = (ECPublicKey) kf.generatePublic(pubSpec);
+        final KeyPair keyPair = new KeyPair(publicKey, privateKey);
+        keyPairToKeyStore(keyStoreName, password, keyName, keyPair);
     }
 
     public KeyPair loadKeyPairFromKeyStore(String filename, String password, String keyName) throws Exception {

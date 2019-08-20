@@ -62,4 +62,33 @@ public final class Base58 {
         return Base58.encode(addressBytes);
     }
 
+    public static byte[] decode(String input) throws Exception {
+        BigInteger value = BigInteger.ZERO;
+        for (int i = input.length() - 1; i >= 0; i--) {
+            int index = ALPHABET.indexOf(input.charAt(i));
+            if (index == -1) throw new Exception("Passed input is not in valid Format");
+            value = value.add(BigInteger.valueOf(index).multiply(BigInteger.valueOf(58).pow(input.length() - 1 - i)));
+        }
+        byte[] bytes = value.toByteArray();
+        boolean stripSignByte = bytes.length > 1 && bytes[0] == 0 && bytes[1] < 0;
+        int stripSignBytePos = stripSignByte ? 1 : 0;
+        int leadingZeros = 0;
+        for (int i = 0; i < input.length() && input.charAt(i) == ALPHABET.charAt(0); i++) {
+            leadingZeros++;
+        }
+        byte[] tmp = new byte[bytes.length - stripSignBytePos + leadingZeros];
+        System.arraycopy(bytes, stripSignBytePos, tmp, leadingZeros, tmp.length - leadingZeros);
+        return tmp;
+    }
+
+    public static byte[] decodeChecked(String input) throws Exception {
+        byte [] bytes = Base58.decode(input);
+        byte [] hash = Arrays.copyOfRange(bytes, 0, bytes.length - 4);
+        byte [] checksum = Arrays.copyOfRange(bytes, bytes.length - 4, bytes.length);
+        byte [] compare_checksum = Arrays.copyOfRange(CryptoService.getSHA256(hash), 0, 4);
+        boolean check = Arrays.equals(compare_checksum, checksum);
+        if(!check) throw new Exception("Checksum could not be verified");
+        return hash;
+    }
+
 }

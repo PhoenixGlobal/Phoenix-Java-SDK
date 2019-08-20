@@ -26,6 +26,7 @@ package crypto;
 import org.bouncycastle.asn1.sec.SECNamedCurves;
 import org.bouncycastle.asn1.x9.X9ECParameters;
 import org.bouncycastle.math.ec.ECPoint;
+import org.bouncycastle.util.Arrays;
 import org.bouncycastle.util.encoders.Hex;
 
 import java.io.ByteArrayOutputStream;
@@ -37,7 +38,7 @@ import java.security.interfaces.ECPrivateKey;
  * @author Artem Eger
  * @since 20.08.2019
  */
-public final class CPXMainnetKey {
+public final class CPXKey {
 
     private static final byte [] CPX_PREFIX = Hex.decode("0548");
     private static final byte [] NEO_PREFIX = Hex.decode("17");
@@ -53,7 +54,7 @@ public final class CPXMainnetKey {
     }
 
     public static String getPrivKeyWIF(ECPrivateKey privateKey) throws Exception {
-        final String privKeyRaw = CPXMainnetKey.getPrivKeyRaw(privateKey);
+        final String privKeyRaw = CPXKey.getPrivKeyRaw(privateKey);
         byte [] wifBytes;
         try(ByteArrayOutputStream out = new ByteArrayOutputStream()) {
             out.write(WIF_PREFIX);
@@ -71,23 +72,35 @@ public final class CPXMainnetKey {
     }
 
     public static String getPubKeyScript(ECPrivateKey privateKey){
-        return SCRIPT_PREFIX + CPXMainnetKey.getPubKeyCompressed(privateKey) + SCRIPT_POSTFIX;
+        return SCRIPT_PREFIX + CPXKey.getPubKeyCompressed(privateKey) + SCRIPT_POSTFIX;
     }
 
     public static String getScriptHash(ECPrivateKey privateKey){
-        return Hex.toHexString(CryptoService.getRIPEMD160(Hex.decode(CPXMainnetKey.getPubKeyScript(privateKey))));
+        return Hex.toHexString(CryptoService.getRIPEMD160(Hex.decode(CPXKey.getPubKeyScript(privateKey))));
     }
 
     public static String getPublicAddressCPX(ECPrivateKey privateKey) throws Exception {
-        return CPXMainnetKey.getPubKey(CPX_PREFIX, privateKey);
+        return CPXKey.getPubKey(CPX_PREFIX, privateKey);
     }
 
     public static String getPublicAddressNEO(ECPrivateKey privateKey) throws Exception {
-        return CPXMainnetKey.getPubKey(NEO_PREFIX, privateKey);
+        return CPXKey.getPubKey(NEO_PREFIX, privateKey);
+    }
+
+    public static String getScriptHashFromCPXAddress(String address) throws Exception {
+        byte [] decodedAddress = Base58.decodeChecked(address);
+        return Hex.toHexString(decodedAddress).substring(4);
+    }
+
+    public static String getRawFromWIF(String wif) throws Exception {
+        byte [] decodedAddress = Base58.decodeChecked(wif);
+        byte [] remove_prefix = Arrays.copyOfRange(decodedAddress, 1, decodedAddress.length);
+        byte [] remove_postfix = Arrays.copyOfRange(remove_prefix, 0, decodedAddress.length - 2);
+        return Hex.toHexString(remove_postfix);
     }
 
     private static String getPubKey(byte [] prefix, ECPrivateKey privateKey) throws Exception{
-        final byte [] scriptHash = Hex.decode(CPXMainnetKey.getScriptHash(privateKey));
+        final byte [] scriptHash = Hex.decode(CPXKey.getScriptHash(privateKey));
         byte [] pubKeyBytes;
         try(ByteArrayOutputStream out = new ByteArrayOutputStream()){
             out.write(prefix);
