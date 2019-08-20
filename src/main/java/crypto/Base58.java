@@ -32,7 +32,7 @@ import java.util.Arrays;
  * @author Artem Eger
  * @since 20.08.2019
  */
-public final class Base58CPX {
+public final class Base58 {
 
     private final static String ALPHABET = "123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz";
     private final static BigInteger BASE = BigInteger.valueOf(58L);
@@ -59,7 +59,7 @@ public final class Base58CPX {
             out.write(checksum);
             addressBytes = out.toByteArray();
         }
-        return Base58CPX.encode(addressBytes);
+        return Base58.encode(addressBytes);
     }
 
 }

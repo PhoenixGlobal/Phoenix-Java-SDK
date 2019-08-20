@@ -53,10 +53,10 @@ import java.util.Date;
  */
 public final class CryptoService {
 
+    static final String EC_CURVE = "secp256r1";
     private static final String KEYSTORE_FORMAT = "UBER";
     private static final String ROOTNAME = "CN=apex-network.com";
     private static final String KEYSTORE_FILE_FORMAT = ".ubr";
-    private static final String EC_CURVE = "secp256r1";
     private static final String ALGORITHM = "ECDSA";
     private static final String PROVIDER = "BC";
     private static final String SIGNER_ALGORITHM = "SHA256withECDSA";
