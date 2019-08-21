@@ -8,10 +8,12 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.security.KeyPair;
+import java.security.SecureRandom;
 import java.security.interfaces.ECPrivateKey;
 
 import static junit.framework.TestCase.assertEquals;
 import static junit.framework.TestCase.assertTrue;
+import static org.junit.Assert.assertArrayEquals;
 
 public class CPXKeyTest {
 
@@ -42,11 +44,19 @@ public class CPXKeyTest {
         final KeyPair keyPair2 = cryptoService.loadKeyPairFromKeyStore(keyStoreName + "2" + ".ubr", keyName, password);
         assertEquals(keyPair.getPublic().hashCode(), keyPair2.getPublic().hashCode());
         assertEquals(keyPair.getPrivate().hashCode(), keyPair2.getPrivate().hashCode());
+        assertEquals(keyPair.getPrivate().getFormat(), keyPair2.getPrivate().getFormat());
         assertEquals(((ECPrivateKey) keyPair.getPrivate()).getS().intValue(), ((ECPrivateKey) keyPair2.getPrivate()).getS().intValue());
         final String cpxAddress2 = CPXKey.getPublicAddressCPX((ECPrivateKey) keyPair2.getPrivate());
         final String privKeyRaw2 = CPXKey.getPrivKeyRaw((ECPrivateKey) keyPair.getPrivate());
         assertEquals(privKeyRaw, privKeyRaw2);
         assertEquals(cpxAddress2, cpxAddress2);
+        final byte [] checksumBytes = new SecureRandom().generateSeed(64);
+        final byte [] signature = cryptoService.getSignature(keyPair.getPrivate(), checksumBytes);
+        final byte [] signature2 = cryptoService.getSignature(keyPair2.getPrivate(), checksumBytes);
+        assertTrue(cryptoService.verifySignature(keyPair2.getPublic(), checksumBytes, signature));
+        assertTrue(cryptoService.verifySignature(keyPair.getPublic(), checksumBytes, signature2));
+        //TODO Signatures not matching yet
+        //assertArrayEquals(signature, signature2);
         System.out.println("Private Key RAW: " + privKeyRaw);
         System.out.println("Private Key WIF: " + privKeyWif);
         System.out.println("Public Key: " + pubKey);
