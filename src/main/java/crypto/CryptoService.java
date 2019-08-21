@@ -50,7 +50,6 @@ import java.security.*;
 import java.security.cert.X509Certificate;
 import java.security.interfaces.ECPrivateKey;
 import java.security.interfaces.ECPublicKey;
-import java.security.spec.ECGenParameterSpec;
 import java.security.spec.ECPrivateKeySpec;
 import java.security.spec.X509EncodedKeySpec;
 import java.util.Calendar;
@@ -98,11 +97,11 @@ public final class CryptoService {
         }
     }
 
-    public void generateKeyStoreFromRawBytes(String keyStoreName, String password, String keyName, byte [] bytes) throws Exception {
+    public void generateKeyStoreFromRawBytes(String keyStoreName, String password, String keyName, String raw) throws Exception {
         final ECNamedCurveParameterSpec ecSpec = ECNamedCurveTable.getParameterSpec(EC_CURVE);
         final ECNamedCurveSpec params = new ECNamedCurveSpec(EC_CURVE, ecSpec.getCurve(), ecSpec.getG(), ecSpec.getN());
+        final ECPrivateKeySpec ecPrivateKeySpec = new ECPrivateKeySpec(new BigInteger(raw, 16), params);
         final KeyFactory kf = KeyFactory.getInstance(ALGORITHM, PROVIDER);
-        final ECPrivateKeySpec ecPrivateKeySpec = new ECPrivateKeySpec(new BigInteger(1, bytes), params);
         final ECPrivateKey privateKey = (ECPrivateKey) kf.generatePrivate(ecPrivateKeySpec);
         final BCECPrivateKey bcec = (BCECPrivateKey) privateKey;
         final ECPoint Q = ecSpec.getG().multiply(bcec.getD());
