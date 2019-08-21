@@ -80,7 +80,7 @@ public final class CryptoService {
     }
 
     public void generateKeystore(String keyStoreName, String password, String keyName) throws Exception {
-        final ECGenParameterSpec ecGenSpec = new ECGenParameterSpec(EC_CURVE);
+        final ECNamedCurveParameterSpec ecGenSpec = ECNamedCurveTable.getParameterSpec(EC_CURVE);
         KeyPairGenerator g = KeyPairGenerator.getInstance(ALGORITHM, PROVIDER);
         g.initialize(ecGenSpec, new SecureRandom());
         final KeyPair keyPair = g.generateKeyPair();
