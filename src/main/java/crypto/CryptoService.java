@@ -70,9 +70,9 @@ public final class CryptoService {
     private static final String PROVIDER = "BC";
     private static final String SIGNER_ALGORITHM = "SHA256withECDSA";
 
-    private static final MessageDigest ripeMd160 = new RIPEMD160.Digest();
-    private static final MessageDigest sha256 = new SHA256.Digest();
-    private static final MessageDigest keccak256 = new Keccak.Digest256();
+    public static final MessageDigest ripeMd160 = new RIPEMD160.Digest();
+    public static final MessageDigest sha256 = new SHA256.Digest();
+    public static final MessageDigest keccak256 = new Keccak.Digest256();
 
     static {
         Security.addProvider(new BouncyCastleProvider());
