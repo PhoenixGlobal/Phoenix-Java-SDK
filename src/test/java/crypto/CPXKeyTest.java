@@ -1,6 +1,5 @@
 package crypto;
 
-import org.bouncycastle.util.encoders.Hex;
 import org.junit.After;
 import org.junit.Test;
 
@@ -13,7 +12,6 @@ import java.security.interfaces.ECPrivateKey;
 
 import static junit.framework.TestCase.assertEquals;
 import static junit.framework.TestCase.assertTrue;
-import static org.junit.Assert.assertArrayEquals;
 
 public class CPXKeyTest {
 
@@ -40,7 +38,7 @@ public class CPXKeyTest {
         assertEquals(scriptHash, decodedScriptHash);
         final String decodedRawFromWif = CPXKey.getRawFromWIF(privKeyWif);
         assertEquals(privKeyRaw, decodedRawFromWif);
-        cryptoService.generateKeyStoreFromRawBytes(keyStoreName + "2", keyName, password, Hex.decode(decodedRawFromWif));
+        cryptoService.generateKeyStoreFromRawBytes(keyStoreName + "2", keyName, password, decodedRawFromWif);
         final KeyPair keyPair2 = cryptoService.loadKeyPairFromKeyStore(keyStoreName + "2" + ".ubr", keyName, password);
         assertEquals(keyPair.getPublic().hashCode(), keyPair2.getPublic().hashCode());
         assertEquals(keyPair.getPrivate().hashCode(), keyPair2.getPrivate().hashCode());
@@ -55,8 +53,6 @@ public class CPXKeyTest {
         final byte [] signature2 = cryptoService.getSignature(keyPair2.getPrivate(), checksumBytes);
         assertTrue(cryptoService.verifySignature(keyPair2.getPublic(), checksumBytes, signature));
         assertTrue(cryptoService.verifySignature(keyPair.getPublic(), checksumBytes, signature2));
-        //TODO Signatures not matching yet
-        //assertArrayEquals(signature, signature2);
         System.out.println("Private Key RAW: " + privKeyRaw);
         System.out.println("Private Key WIF: " + privKeyWif);
         System.out.println("Public Key: " + pubKey);
