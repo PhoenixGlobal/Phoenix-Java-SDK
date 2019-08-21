@@ -1,5 +1,6 @@
 package crypto;
 
+import org.bouncycastle.util.encoders.Hex;
 import org.junit.After;
 import org.junit.Test;
 
@@ -33,7 +34,18 @@ public class CPXKeyTest {
         final String scriptHash = CPXKey.getScriptHash((ECPrivateKey) keyPair.getPrivate());
         final String cpxAddress = CPXKey.getPublicAddressCPX((ECPrivateKey) keyPair.getPrivate());
         final String neoAddress = CPXKey.getPublicAddressNEO((ECPrivateKey) keyPair.getPrivate());
+        final String mnemonic = MnemonicUtils.generateMnemonic(Hex.decode(privKeyRaw));
+        final String privKeyRawFromMnemonic = Hex.toHexString(MnemonicUtils.generateEntropy(mnemonic));
+        System.out.println("Private Key RAW: " + privKeyRaw);
+        System.out.println("Private Key WIF: " + privKeyWif);
+        System.out.println("Public Key: " + pubKey);
+        System.out.println("Public Key Script: " + pubKeyScript);
+        System.out.println("RIPEMD160 Script Hash: " + scriptHash);
+        System.out.println("CPX Address: " + cpxAddress);
+        System.out.println("NEO Address: " + neoAddress);
+        System.out.println("Mnemonic: " + mnemonic);
 
+        assertEquals(privKeyRaw, privKeyRawFromMnemonic);
         final String decodedScriptHash = CPXKey.getScriptHashFromCPXAddress(cpxAddress);
         assertEquals(scriptHash, decodedScriptHash);
         final String decodedRawFromWif = CPXKey.getRawFromWIF(privKeyWif);
@@ -53,13 +65,6 @@ public class CPXKeyTest {
         final byte [] signature2 = cryptoService.getSignature(keyPair2.getPrivate(), checksumBytes);
         assertTrue(cryptoService.verifySignature(keyPair2.getPublic(), checksumBytes, signature));
         assertTrue(cryptoService.verifySignature(keyPair.getPublic(), checksumBytes, signature2));
-        System.out.println("Private Key RAW: " + privKeyRaw);
-        System.out.println("Private Key WIF: " + privKeyWif);
-        System.out.println("Public Key: " + pubKey);
-        System.out.println("Public Key Script: " + pubKeyScript);
-        System.out.println("RIPEMD160 Script Hash: " + scriptHash);
-        System.out.println("CPX Address: " + cpxAddress);
-        System.out.println("NEO Address: " + neoAddress);
     }
 
     @After
