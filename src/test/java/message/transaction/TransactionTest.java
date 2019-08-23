@@ -1,5 +1,6 @@
-package datastructure;
+package message.transaction;
 
+import message.util.GenericJacksonWriter;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -9,6 +10,8 @@ import java.time.Instant;
 import static junit.framework.TestCase.assertEquals;
 
 public class TransactionTest {
+
+    private GenericJacksonWriter writer = new GenericJacksonWriter();
 
     @Test
     public void createValidTxTest() throws IOException {
@@ -25,9 +28,8 @@ public class TransactionTest {
                 .version(1)
                 .executeTime(Instant.now().toEpochMilli())
                 .build();
-        final String jsonString = tx.getAsJsonString();
-        Transaction tx2 = new Transaction();
-        tx2 = (Transaction) tx2.getObjectFromJsonString(jsonString);
+        final String jsonString = writer.getStringFromRequestObject(tx);
+        Transaction tx2 = writer.getObjectFromString(Transaction.class, jsonString);
         assertEquals(tx, tx2);
     }
 

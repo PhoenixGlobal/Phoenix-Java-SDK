@@ -1,5 +1,6 @@
 package message.response;
 
+import message.util.GenericJacksonWriter;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -8,7 +9,7 @@ import static junit.framework.TestCase.assertEquals;
 
 public class ExecResultTest {
 
-    private ResponseMessageWriter writer = new ResponseMessageWriter();
+    private GenericJacksonWriter writer = new GenericJacksonWriter();
 
     @Test
     public void validExecResultTest() throws IOException {
@@ -18,8 +19,8 @@ public class ExecResultTest {
                 .message("dummy")
                 .result("result")
                 .build();
-        final String jsonString = writer.getStringFromExecResult(classUnderTest);
-        final ExecResult result = writer.getExecResultFromString(jsonString);
+        final String jsonString = writer.getStringFromRequestObject(classUnderTest);
+        final ExecResult result = writer.getObjectFromString(ExecResult.class, jsonString);
         assertEquals(classUnderTest, result);
     }
 
@@ -36,7 +37,8 @@ public class ExecResultTest {
                 .message("dummy")
                 .result("result")
                 .build();
-        final ExecResult result = writer.getExecResultFromString(validJsonString);
+        final ExecResult result = writer.getObjectFromString(ExecResult.class, validJsonString);
         assertEquals(classUnderTest, result);
     }
+
 }

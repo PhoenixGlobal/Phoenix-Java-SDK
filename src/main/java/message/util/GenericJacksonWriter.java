@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package message.request;
+package message.util;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -29,12 +29,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
 
 /**
- * This class provides functionality to convert {@link ARequestMessage} to JSON
- * Strings and vice versa
+ * This class provides functionality to convert Jackson Objects
+ * to JSON Strings and vice versa
  * @author Artem Eger
- * @since 16.08.2019
+ * @since 23.08.2019
  */
-public class RequestMessageWriter {
+public class GenericJacksonWriter {
 
     /**
      * {@link ObjectMapper}
@@ -44,41 +44,41 @@ public class RequestMessageWriter {
     /**
      * Default constructor
      */
-    public RequestMessageWriter(){
+    public  GenericJacksonWriter(){
         this.mapper = new ObjectMapper();
     }
 
     /**
      * Constructor allowing for a custom mapper
      */
-    public RequestMessageWriter(ObjectMapper mapper){
+    public GenericJacksonWriter(ObjectMapper mapper){
         this.mapper = mapper;
     }
 
     /**
-     * Converts a JSON String to a {@link ARequestMessage}
+     * Converts a JSON String to a Jackson annotated Object
      * @param jsonString String to be converted
-     * @return a valid {@link ARequestMessage}
+     * @return a valid Jackson annotated Object
      */
-    public ARequestMessage getRequestObjectFromString(String jsonString) throws IOException {
-        return mapper.readValue(jsonString, ARequestMessage.class);
+    public <T> T getObjectFromString(Class<T> objClass, String jsonString) throws IOException {
+        return mapper.readValue(jsonString, objClass);
     }
 
     /**
-     * Converts a {@link ARequestMessage} to a JSON String
-     * @param msg {@link ARequestMessage} to be converted
-     * @return String value of the {@link ARequestMessage}
+     * Converts a Jackson annotated Object to a JSON String
+     * @param msg Object to be converted
+     * @return String value of the Jackson annotated Object
      */
-    public String getStringFromRequestObject(ARequestMessage msg) throws JsonProcessingException {
+    public String getStringFromRequestObject(Object msg) throws JsonProcessingException {
         return mapper.writer().writeValueAsString(msg);
     }
 
     /**
-     * Converts a {@link ARequestMessage} to a byte array
-     * @param msg {@link ARequestMessage} to be converted
-     * @return byte array of the {@link ARequestMessage}
+     * Converts a Jackson annotated Object to a byte array
+     * @param msg Object to be converted
+     * @return byte array of the Object
      */
-    public byte[] getBytesFromRequestObject(ARequestMessage msg) throws JsonProcessingException {
+    public byte[] getBytesFromRequestObject(Object msg) throws JsonProcessingException {
         return mapper.writer().writeValueAsBytes(msg);
     }
 

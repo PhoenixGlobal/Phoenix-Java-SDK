@@ -21,20 +21,58 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package datastructure;
+package message.transaction;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.*;
+
+import java.math.BigInteger;
 
 /**
- * This class defines valid {@link Transaction} type identifiers
+ * This class represents a Transaction object
  * @author Artem Eger
  * @since 17.08.2019
  */
-public final class TransactionType {
+@Getter
+@Setter
+@ToString
+@EqualsAndHashCode(callSuper = false)
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+public class Transaction {
 
-    public static final byte MINER = 0x00;
-    public static final byte TRANSFER = 0x01;
-    public static final byte DEPLOY = 0x02;
-    public static final byte CALL = 0x03;
-    public static final byte REFUND = 0x04;
-    public static final byte SCHEDULE = 0x05;
+    @JsonProperty("txType")
+    @NonNull private byte txType;
+
+    @JsonProperty("from")
+    @NonNull private String from;
+
+    @JsonProperty("toPubKeyHash")
+    @NonNull private String toPubKeyHash;
+
+    @JsonProperty("amount")
+    @NonNull private double amount;
+
+    @JsonProperty("nonce")
+    @NonNull private long nonce;
+
+    @JsonProperty("data")
+    @NonNull private byte [] data;
+
+    @JsonProperty("gasPrice")
+    @NonNull private double gasPrice;
+
+    @JsonProperty("gasLimit")
+    @NonNull private BigInteger gasLimit;
+
+    @JsonProperty("signature")
+    @NonNull private byte [] signature;
+
+    @JsonProperty("version")
+    @NonNull private int version;
+
+    @JsonProperty("executeTime")
+    @NonNull private long executeTime;
 
 }

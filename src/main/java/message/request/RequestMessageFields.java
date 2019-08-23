@@ -24,7 +24,7 @@
 package message.request;
 
 /**
- * This class defines valid message field keys for {@link ARequestMessage}
+ * This class defines valid message field keys for {@link IRPCMessage}
  * @author Artem Eger
  * @since 16.08.2019
  */

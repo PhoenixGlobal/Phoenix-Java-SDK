@@ -1,7 +1,7 @@
 package message.request.cmd;
 
 import message.request.RPCPathName;
-import message.request.RequestMessageWriter;
+import message.util.GenericJacksonWriter;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -10,21 +10,21 @@ import static junit.framework.TestCase.assertEquals;
 
 public class GetProducersCmdTest {
 
-    private RequestMessageWriter writer = new RequestMessageWriter();
+    private GenericJacksonWriter writer = new GenericJacksonWriter();
 
     @Test
     public void validRPCMessageTest() throws IOException {
         final GetProducersCmd classUnderTest = new GetProducersCmd("list");
         final String jsonString = writer.getStringFromRequestObject(classUnderTest);
-        final GetProducersCmd msg = (GetProducersCmd) writer.getRequestObjectFromString(jsonString);
+        final GetProducersCmd msg = writer.getObjectFromString(GetProducersCmd.class, jsonString);
         assertEquals(classUnderTest, msg);
     }
 
     @Test
     public void validRPCMessageFromStringTest() throws IOException {
-        final String validJsonString = "{\"name\": \"GetProducersCmd\", \"listType\" : \"list\"}";
+        final String validJsonString = "{\"listType\" : \"list\"}";
         final GetProducersCmd classUnderTest = new GetProducersCmd("list");
-        final GetProducersCmd msg = (GetProducersCmd) writer.getRequestObjectFromString(validJsonString);
+        final GetProducersCmd msg = writer.getObjectFromString(GetProducersCmd.class, validJsonString);
         assertEquals(classUnderTest, msg);
     }
 

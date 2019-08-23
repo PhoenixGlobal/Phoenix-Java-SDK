@@ -24,10 +24,9 @@
 package message.request.cmd;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import lombok.*;
 import message.request.RPCPathName;
-import message.request.ARequestMessage;
+import message.request.IRPCMessage;
 
 /**
  * This class represents a RPC message to request the current average
@@ -38,10 +37,9 @@ import message.request.ARequestMessage;
 @Getter
 @Setter
 @ToString
-@EqualsAndHashCode(callSuper = false)
+@EqualsAndHashCode
 @NoArgsConstructor
-@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "name")
-public class GetAvarageCmd extends ARequestMessage {
+public class GetAvarageCmd implements IRPCMessage {
 
     /**
      * @return target RPC Endpoint for this message

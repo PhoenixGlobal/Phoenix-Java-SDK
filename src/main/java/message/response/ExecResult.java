@@ -34,7 +34,7 @@ import lombok.*;
 @Getter
 @Setter
 @ToString
-@EqualsAndHashCode(callSuper = false)
+@EqualsAndHashCode
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
