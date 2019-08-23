@@ -23,10 +23,8 @@
  */
 package message.util;
 
-import message.request.ARequestMessage;
-import message.request.RequestMessageWriter;
+import message.request.IRPCMessage;
 import message.response.ExecResult;
-import message.response.ResponseMessageWriter;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -45,27 +43,25 @@ public class RequestCallerService {
     private final String METHOD_POST = "POST";
     private final String PROPERTY_TYPE = "Content-Type";
     private final String JSON_TYPE = "application/json";
-
-    private final RequestMessageWriter requestMessageWriter = new RequestMessageWriter();
-    private final ResponseMessageWriter responseMessageWriter = new ResponseMessageWriter();
+    private final GenericJacksonWriter writer = new GenericJacksonWriter();
 
     /**
      * This method creates a POST request without authorization
      * @param urlString url of the RPC server
-     * @param msg {@link ARequestMessage} type message to pass
+     * @param msg {@link IRPCMessage} type message to pass
      * @return {@link ExecResult} object response from the RPC server
      * @throws Exception on URL connection
      */
-    public ExecResult postRequest(String urlString, ARequestMessage msg) throws Exception {
+    public <T> T postRequest(String urlString, IRPCMessage msg, Class<T> responseClass) throws Exception {
         URL url = new URL(urlString + "/" + msg.getRpcPath());
         HttpURLConnection con = (HttpURLConnection) url.openConnection();
         con.setRequestMethod(METHOD_POST);
         con.setRequestProperty(PROPERTY_TYPE, JSON_TYPE);
         con.setDoOutput(true);
         try(OutputStream out = con.getOutputStream()) {
-            out.write(requestMessageWriter.getBytesFromRequestObject(msg));
+            out.write(writer.getBytesFromRequestObject(msg));
         }
-        return responseMessageWriter.getExecResultFromString(contentToString(con));
+        return writer.getObjectFromString(responseClass, contentToString(con));
     }
 
     /**

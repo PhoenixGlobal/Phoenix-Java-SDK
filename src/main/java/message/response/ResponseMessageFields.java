@@ -24,7 +24,7 @@
 package message.response;
 
 /**
- * This class defines valid message field keys for {@link ExecResult}
+ * This class defines valid message field keys for response messages
  * @author Artem Eger
  * @since 16.08.2019
  */

@@ -21,41 +21,16 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package message.request.cmd;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.*;
-import message.request.RPCPathName;
-import message.request.IRPCMessage;
-import message.request.RequestMessageFields;
+package message.transaction;
 
 /**
- * This class represents a RPC message to request account information
+ * This class defines valid Operation type identifiers
  * @author Artem Eger
- * @since 16.08.2019
+ * @since 17.08.2019
  */
-@Getter
-@Setter
-@ToString
-@EqualsAndHashCode
-@NoArgsConstructor
-@AllArgsConstructor
-public class GetAccountCmd implements IRPCMessage {
+public final class OperationType {
 
-    /**
-     * The account hash to request
-     */
-    @JsonProperty(RequestMessageFields.ADDRESS)
-    @NonNull private String accountId;
-
-    /**
-     * @return target RPC Endpoint for this message
-     */
-    @JsonIgnore
-    @Override
-    public String getRpcPath() {
-        return RPCPathName.SHOW_ACCOUNT;
-    }
+    public static final byte REGISTER = 0x00;
+    public static final byte REGISTER_CANCEL = 0x01;
 
 }

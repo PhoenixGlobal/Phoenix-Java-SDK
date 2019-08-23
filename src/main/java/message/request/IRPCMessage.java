@@ -21,16 +21,16 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package datastructure;
+package message.request;
 
 /**
- * This class defines valid Operation type identifiers
+ * This interface should be implemented by classes that have a defined
+ * RPC target
  * @author Artem Eger
- * @since 17.08.2019
+ * @since 16.08.2019
  */
-public final class OperationType {
+public interface IRPCMessage {
 
-    public static final byte REGISTER = 0x00;
-    public static final byte REGISTER_CANCEL = 0x01;
+    String getRpcPath();
 
 }

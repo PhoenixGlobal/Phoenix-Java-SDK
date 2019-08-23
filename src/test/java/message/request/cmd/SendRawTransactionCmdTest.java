@@ -1,7 +1,7 @@
 package message.request.cmd;
 
 import message.request.RPCPathName;
-import message.request.RequestMessageWriter;
+import message.util.GenericJacksonWriter;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -11,21 +11,21 @@ import static junit.framework.TestCase.assertEquals;
 
 public class SendRawTransactionCmdTest {
 
-    private RequestMessageWriter writer = new RequestMessageWriter();
+    private GenericJacksonWriter writer = new GenericJacksonWriter();
 
     @Test
     public void validRPCMessageTest() throws IOException {
         final SendRawTransactionCmd classUnderTest = new SendRawTransactionCmd(new SecureRandom().generateSeed(64));
         final String jsonString = writer.getStringFromRequestObject(classUnderTest);
-        final SendRawTransactionCmd msg = (SendRawTransactionCmd) writer.getRequestObjectFromString(jsonString);
+        final SendRawTransactionCmd msg = writer.getObjectFromString(SendRawTransactionCmd.class, jsonString);
         assertEquals(classUnderTest, msg);
     }
 
     @Test
     public void validRPCMessageFromStringTest() throws IOException {
-        final String validJsonString = "{\"name\": \"SendRawTransactionCmd\", \"rawTx\" : \"dGVzdA==\"}";
+        final String validJsonString = "{\"rawTx\" : \"dGVzdA==\"}";
         final SendRawTransactionCmd classUnderTest = new SendRawTransactionCmd("test".getBytes());
-        final SendRawTransactionCmd msg = (SendRawTransactionCmd) writer.getRequestObjectFromString(validJsonString);
+        final SendRawTransactionCmd msg = writer.getObjectFromString(SendRawTransactionCmd.class, validJsonString);
         assertEquals(classUnderTest, msg);
     }
 
