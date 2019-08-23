@@ -50,7 +50,7 @@ public class CPXKeyTest {
         assertEquals(scriptHash, decodedScriptHash);
         final String decodedRawFromWif = CPXKey.getRawFromWIF(privKeyWif);
         assertEquals(privKeyRaw, decodedRawFromWif);
-        cryptoService.generateKeyStoreFromRawBytes(keyStoreName + "2", keyName, password, decodedRawFromWif);
+        cryptoService.generateKeyStoreFromRawString(keyStoreName + "2", keyName, password, decodedRawFromWif);
         final KeyPair keyPair2 = cryptoService.loadKeyPairFromKeyStore(keyStoreName + "2" + ".ubr", keyName, password);
         assertEquals(keyPair.getPublic().hashCode(), keyPair2.getPublic().hashCode());
         assertEquals(keyPair.getPrivate().hashCode(), keyPair2.getPrivate().hashCode());

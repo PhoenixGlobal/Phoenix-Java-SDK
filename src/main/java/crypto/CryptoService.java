@@ -74,6 +74,9 @@ public final class CryptoService {
     public static final MessageDigest sha256 = new SHA256.Digest();
     public static final MessageDigest keccak256 = new Keccak.Digest256();
 
+    private final ECNamedCurveParameterSpec ecSpec = ECNamedCurveTable.getParameterSpec(EC_CURVE);
+    private final ECNamedCurveSpec params = new ECNamedCurveSpec(EC_CURVE, ecSpec.getCurve(), ecSpec.getG(), ecSpec.getN());
+
     static {
         Security.addProvider(new BouncyCastleProvider());
     }
@@ -97,13 +100,10 @@ public final class CryptoService {
         }
     }
 
-    public void generateKeyStoreFromRawBytes(String keyStoreName, String password, String keyName, String raw) throws Exception {
-        final ECNamedCurveParameterSpec ecSpec = ECNamedCurveTable.getParameterSpec(EC_CURVE);
-        final ECNamedCurveSpec params = new ECNamedCurveSpec(EC_CURVE, ecSpec.getCurve(), ecSpec.getG(), ecSpec.getN());
-        final ECPrivateKeySpec ecPrivateKeySpec = new ECPrivateKeySpec(new BigInteger(raw, 16), params);
-        final KeyFactory kf = KeyFactory.getInstance(ALGORITHM, PROVIDER);
-        final ECPrivateKey privateKey = (ECPrivateKey) kf.generatePrivate(ecPrivateKeySpec);
+    public void generateKeyStoreFromRawString(String keyStoreName, String password, String keyName, String raw) throws Exception {
+        final ECPrivateKey privateKey = getECPrivateKeyFromRawString(raw);
         final BCECPrivateKey bcec = (BCECPrivateKey) privateKey;
+        final KeyFactory kf = KeyFactory.getInstance(ALGORITHM, PROVIDER);
         final ECPoint Q = ecSpec.getG().multiply(bcec.getD());
         final byte[] publicBytes = Q.getEncoded(false);
         final ECPoint point = ecSpec.getCurve().decodePoint(publicBytes);
@@ -111,6 +111,12 @@ public final class CryptoService {
         final ECPublicKey publicKey = (ECPublicKey) kf.generatePublic(pubSpec);
         final KeyPair keyPair = new KeyPair(publicKey, privateKey);
         keyPairToKeyStore(keyStoreName, password, keyName, keyPair);
+    }
+
+    public ECPrivateKey getECPrivateKeyFromRawString(String raw) throws Exception {
+        final ECPrivateKeySpec ecPrivateKeySpec = new ECPrivateKeySpec(new BigInteger(raw, 16), params);
+        final KeyFactory kf = KeyFactory.getInstance(ALGORITHM, PROVIDER);
+        return (ECPrivateKey) kf.generatePrivate(ecPrivateKeySpec);
     }
 
     public KeyPair loadKeyPairFromKeyStore(String filename, String password, String keyName) throws Exception {
