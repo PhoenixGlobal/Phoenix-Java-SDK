@@ -47,7 +47,7 @@ public class SendRawTransactionCmd implements IRPCMessage {
      * The transaction bytes
      */
     @JsonProperty(RequestMessageFields.RAW_TX)
-    @NonNull private byte [] tx;
+    @NonNull private String tx;
 
     /**
      * @return target RPC Endpoint for this message

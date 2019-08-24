@@ -26,6 +26,7 @@ package message.transaction;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 
+import java.io.Serializable;
 import java.math.BigInteger;
 
 /**
@@ -40,7 +41,7 @@ import java.math.BigInteger;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Transaction {
+public class Transaction implements Serializable {
 
     @JsonProperty("txType")
     @NonNull private byte txType;
@@ -58,7 +59,7 @@ public class Transaction {
     @NonNull private long nonce;
 
     @JsonProperty("data")
-    @NonNull private byte [] data;
+    private byte [] data;
 
     @JsonProperty("gasPrice")
     @NonNull private double gasPrice;
@@ -67,7 +68,7 @@ public class Transaction {
     @NonNull private BigInteger gasLimit;
 
     @JsonProperty("signature")
-    @NonNull private byte [] signature;
+    private byte [] signature;
 
     @JsonProperty("version")
     @NonNull private int version;
