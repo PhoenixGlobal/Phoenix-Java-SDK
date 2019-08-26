@@ -26,6 +26,8 @@ package message.response;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 
+import java.util.HashMap;
+
 /**
  * This class represents a RPC message execution response
  * @author Artem Eger
@@ -50,6 +52,6 @@ public class ExecResult {
     @NonNull private String message;
 
     @JsonProperty(ResponseMessageFields.RESULT)
-    @NonNull private String result;
+    @NonNull private HashMap<String, Object> result;
 
 }

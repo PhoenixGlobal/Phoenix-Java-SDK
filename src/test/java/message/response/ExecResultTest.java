@@ -4,6 +4,7 @@ import message.util.GenericJacksonWriter;
 import org.junit.Test;
 
 import java.io.IOException;
+import java.util.HashMap;
 
 import static junit.framework.TestCase.assertEquals;
 
@@ -17,7 +18,7 @@ public class ExecResultTest {
                 .succeed(true)
                 .status(200)
                 .message("dummy")
-                .result("result")
+                .result(new HashMap<>())
                 .build();
         final String jsonString = writer.getStringFromRequestObject(classUnderTest);
         final ExecResult result = writer.getObjectFromString(ExecResult.class, jsonString);
@@ -29,13 +30,13 @@ public class ExecResultTest {
         final String validJsonString = "{" +
                 "\"succeed\": true," +
                 "\"status\": 200," +
-                "\"result\": \"result\"," +
+                "\"result\": {}," +
                 "\"message\": \"dummy\"}";
         final ExecResult classUnderTest = ExecResult.builder()
                 .succeed(true)
                 .status(200)
                 .message("dummy")
-                .result("result")
+                .result(new HashMap<>())
                 .build();
         final ExecResult result = writer.getObjectFromString(ExecResult.class, validJsonString);
         assertEquals(classUnderTest, result);

@@ -23,11 +23,14 @@
  */
 package message.transaction;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import crypto.CryptoService;
 import lombok.*;
+import org.bouncycastle.util.encoders.Hex;
 
-import java.io.Serializable;
+import java.io.ByteArrayOutputStream;
+import java.io.DataOutputStream;
 import java.math.BigInteger;
+import java.security.PrivateKey;
 
 /**
  * This class represents a Transaction object
@@ -37,43 +40,66 @@ import java.math.BigInteger;
 @Getter
 @Setter
 @ToString
-@EqualsAndHashCode(callSuper = false)
+@EqualsAndHashCode
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Transaction implements Serializable {
+public class Transaction {
 
-    @JsonProperty("txType")
-    @NonNull private byte txType;
+    private int version;
 
-    @JsonProperty("from")
-    @NonNull private String from;
+    private byte txType;
 
-    @JsonProperty("toPubKeyHash")
-    @NonNull private String toPubKeyHash;
+    private String fromPubKeyHash;
 
-    @JsonProperty("amount")
-    @NonNull private double amount;
+    private String toPubKeyHash;
 
-    @JsonProperty("nonce")
-    @NonNull private long nonce;
+    private FixedNumber amount;
 
-    @JsonProperty("data")
-    private byte [] data;
+    private long nonce;
 
-    @JsonProperty("gasPrice")
-    @NonNull private double gasPrice;
+    private byte [] data = new byte[1];
 
-    @JsonProperty("gasLimit")
-    @NonNull private BigInteger gasLimit;
+    private FixedNumber gasPrice;
 
-    @JsonProperty("signature")
+    private BigInteger gasLimit;
+
     private byte [] signature;
 
-    @JsonProperty("version")
-    @NonNull private int version;
+    private long executeTime = 0L;
 
-    @JsonProperty("executeTime")
-    @NonNull private long executeTime;
+    public byte[] getBytes(CryptoService cryptoService, PrivateKey privateKey) throws Exception {
+        byte [] signatureBytes;
+        try(ByteArrayOutputStream out  = new ByteArrayOutputStream()){
+            try(DataOutputStream dataOut = new DataOutputStream(out)) {
+                dataOut.writeInt(this.version);
+                dataOut.writeByte(this.txType);
+                dataOut.write(Hex.decode(this.fromPubKeyHash));
+                dataOut.write(Hex.decode(this.toPubKeyHash));
+                dataOut.write(this.getAmount().getBytes());
+                dataOut.writeLong(this.nonce);
+                if(this.data.length <= 1) {
+                    dataOut.write(new byte[1]);
+                } else {
+                    dataOut.write(this.getData().length);
+                    dataOut.write(this.getData());
+                }
+                dataOut.write(this.getGasPrice().getBytes());
+                dataOut.write(this.gasLimit.toByteArray().length);
+                dataOut.write(this.gasLimit.toByteArray());
+                dataOut.writeLong(this.getExecuteTime());
+                signatureBytes = out.toByteArray();
+            }
+        }
+        this.signature = cryptoService.getSignature(privateKey, signatureBytes);
+        try(ByteArrayOutputStream out  = new ByteArrayOutputStream()) {
+            try (DataOutputStream obj = new DataOutputStream(out)) {
+                obj.write(signatureBytes);
+                obj.write(this.signature.length);
+                obj.write(this.signature);
+                return out.toByteArray();
+            }
+        }
+    }
 
 }

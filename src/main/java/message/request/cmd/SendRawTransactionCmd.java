@@ -29,6 +29,7 @@ import lombok.*;
 import message.request.RPCPathName;
 import message.request.IRPCMessage;
 import message.request.RequestMessageFields;
+import org.bouncycastle.util.encoders.Hex;
 
 /**
  * This class represents a RPC message to publish a new transaction
@@ -56,6 +57,15 @@ public class SendRawTransactionCmd implements IRPCMessage {
     @Override
     public String getRpcPath() {
         return RPCPathName.SEND_RAW_TX;
+    }
+
+    /**
+     * Constructor to pass raw tx bytes
+     * @param txBytes raw tx bytes that will get encoded to a Hex String
+     */
+    @JsonIgnore
+    public SendRawTransactionCmd(byte [] txBytes){
+        this.tx = Hex.toHexString(txBytes);
     }
 
 }

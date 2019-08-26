@@ -68,7 +68,7 @@ public final class CPXKey {
     public static String getPubKeyCompressed(ECPrivateKey privateKey){
         final X9ECParameters params = SECNamedCurves.getByName(CryptoService.EC_CURVE);
         final ECPoint point = params.getG().multiply(privateKey.getS());
-        return  Hex.toHexString(point.getEncoded(true));
+        return Hex.toHexString(point.getEncoded(true));
     }
 
     public static String getPubKeyScript(ECPrivateKey privateKey){
