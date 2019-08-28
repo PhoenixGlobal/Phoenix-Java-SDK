@@ -22,7 +22,7 @@ public class GetAccountCmdTest {
 
     @Test
     public void validRPCMessageFromStringTest() throws IOException {
-        final String validJsonString = "{\"address\" : \"5487b77c71dd2730b8537cd28580da7d0f93d90dcf6753de110646897807fecf\"}";
+        final String validJsonString = "{\"name\": \"GetAccountCmd\", \"address\" : \"5487b77c71dd2730b8537cd28580da7d0f93d90dcf6753de110646897807fecf\"}";
         final GetAccountCmd classUnderTest = new GetAccountCmd("5487b77c71dd2730b8537cd28580da7d0f93d90dcf6753de110646897807fecf");
         final GetAccountCmd msg = writer.getObjectFromString(GetAccountCmd.class, validJsonString);
         assertEquals(classUnderTest, msg);

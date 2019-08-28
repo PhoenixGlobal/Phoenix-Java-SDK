@@ -2,6 +2,7 @@ package message.request.cmd;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import lombok.*;
 import message.request.RPCPathName;
 import message.request.IRPCMessage;
@@ -18,6 +19,7 @@ import message.request.RequestMessageFields;
 @EqualsAndHashCode
 @NoArgsConstructor
 @AllArgsConstructor
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "name")
 public class GetProducerAllVoterCmd implements IRPCMessage {
 
     /**

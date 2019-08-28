@@ -7,6 +7,7 @@ import message.response.ExecResult;
 import message.transaction.FixedNumber;
 import message.transaction.Transaction;
 import message.transaction.TransactionType;
+import message.util.GenericJacksonWriter;
 import message.util.RequestCallerService;
 
 import org.junit.Ignore;
@@ -16,6 +17,7 @@ import java.math.BigInteger;
 import java.security.interfaces.ECPrivateKey;
 import java.time.Instant;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import static junit.framework.TestCase.assertEquals;
 
@@ -40,9 +42,11 @@ public class TransactionBroadcastTest {
         final String fromHash = CPXKey.getScriptHash(privateKey);
         final String toHash = CPXKey.getScriptHashFromCPXAddress("APEt5ThLdoXiMGQkDmGnfY271vJrii5LxxM");
         final GetAccountCmd getAccountCmd = new GetAccountCmd(CPXKey.getPublicAddressCPX(privateKey));
+        final GenericJacksonWriter writer = new GenericJacksonWriter();
 
-        final ExecResult responseAcc = url.postRequest(rpc_url, getAccountCmd, ExecResult.class);
-        final long nonce = (int) responseAcc.getResult().get("nextNonce");
+        final ExecResult responseAcc = writer.getObjectFromString(ExecResult.class, url.postRequest(rpc_url, getAccountCmd));
+        HashMap<String, Object> responseMap = (HashMap<String, Object>) responseAcc.getResult();
+        final long nonce = (int) responseMap.get("nextNonce");
         final Transaction tx = Transaction.builder()
                 .txType(TransactionType.TRANSFER)
                 .fromPubKeyHash(fromHash)
@@ -56,7 +60,7 @@ public class TransactionBroadcastTest {
                 .executeTime(Instant.now().toEpochMilli())
                 .build();
         SendRawTransactionCmd cmd = new SendRawTransactionCmd(tx.getBytes(cryptoService, privateKey));
-        ExecResult response = url.postRequest(rpc_url, cmd, ExecResult.class);
+        ExecResult response = writer.getObjectFromString(ExecResult.class, url.postRequest(rpc_url, cmd));
         assertEquals(200, response.getStatus());
 
         SendRawTransactionBatchCmd batch = new SendRawTransactionBatchCmd();
@@ -68,7 +72,7 @@ public class TransactionBroadcastTest {
         SendRawTransactionCmd cmd2 = new SendRawTransactionCmd(tx.getBytes(cryptoService, privateKey));
         txList.add(cmd2);
         batch.setBatch(txList);
-        ExecResult responseBatch = url.postRequest(rpc_url, batch, ExecResult.class);
+        ExecResult responseBatch = writer.getObjectFromString(ExecResult.class, url.postRequest(rpc_url, batch));
         assertEquals(200, responseBatch.getStatus());
     }
 

@@ -49,10 +49,10 @@ public class RequestCallerService {
      * This method creates a POST request without authorization
      * @param urlString url of the RPC server
      * @param msg {@link IRPCMessage} type message to pass
-     * @return {@link ExecResult} object response from the RPC server
+     * @return String response from the RPC server
      * @throws Exception on URL connection
      */
-    public <T> T postRequest(String urlString, IRPCMessage msg, Class<T> responseClass) throws Exception {
+    public String postRequest(String urlString, IRPCMessage msg) throws Exception {
         URL url = new URL(urlString + "/" + msg.getRpcPath());
         HttpURLConnection con = (HttpURLConnection) url.openConnection();
         con.setRequestMethod(METHOD_POST);
@@ -61,7 +61,7 @@ public class RequestCallerService {
         try(OutputStream out = con.getOutputStream()) {
             out.write(writer.getBytesFromRequestObject(msg));
         }
-        return writer.getObjectFromString(responseClass, contentToString(con));
+        return contentToString(con);
     }
 
     /**

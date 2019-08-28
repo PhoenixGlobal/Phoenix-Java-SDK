@@ -22,7 +22,7 @@ public class GetBlockByHeightCmdTest {
 
     @Test
     public void validRPCMessageFromStringTest() throws IOException {
-        final String validJsonString = "{\"height\" : 1}";
+        final String validJsonString = "{\"name\": \"GetBlockByHeightCmd\", \"height\" : 1}";
         final GetBlockByHeightCmd classUnderTest = new GetBlockByHeightCmd(1);
         final GetBlockByHeightCmd msg = writer.getObjectFromString(GetBlockByHeightCmd.class, validJsonString);
         assertEquals(classUnderTest, msg);
