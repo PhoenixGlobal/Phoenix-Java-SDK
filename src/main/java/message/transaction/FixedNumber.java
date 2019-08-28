@@ -41,8 +41,6 @@ import java.math.BigInteger;
 @Setter
 public class FixedNumber {
 
-    private final static long EXP18 = 1000000000000000000L;
-
     public final static long ZERO_VALUE = 0L;
     public final static long MIN_VALUE = 1L;
     public final static long ONE_VALUE = 1000000000000000000L;
