@@ -7,6 +7,7 @@ import message.response.ExecResult;
 import message.transaction.FixedNumber;
 import message.transaction.Transaction;
 import message.transaction.TransactionType;
+import message.util.GenericJacksonWriter;
 import message.util.RequestCallerService;
 
 import org.junit.Ignore;
@@ -41,8 +42,9 @@ public class TransactionBroadcastTest {
         final String fromHash = CPXKey.getScriptHash(privateKey);
         final String toHash = CPXKey.getScriptHashFromCPXAddress("APEt5ThLdoXiMGQkDmGnfY271vJrii5LxxM");
         final GetAccountCmd getAccountCmd = new GetAccountCmd(CPXKey.getPublicAddressCPX(privateKey));
+        final GenericJacksonWriter writer = new GenericJacksonWriter();
 
-        final ExecResult responseAcc = url.postRequest(rpc_url, getAccountCmd, ExecResult.class);
+        final ExecResult responseAcc = writer.getObjectFromString(ExecResult.class, url.postRequest(rpc_url, getAccountCmd));
         HashMap<String, Object> responseMap = (HashMap<String, Object>) responseAcc.getResult();
         final long nonce = (int) responseMap.get("nextNonce");
         final Transaction tx = Transaction.builder()
@@ -58,7 +60,7 @@ public class TransactionBroadcastTest {
                 .executeTime(Instant.now().toEpochMilli())
                 .build();
         SendRawTransactionCmd cmd = new SendRawTransactionCmd(tx.getBytes(cryptoService, privateKey));
-        ExecResult response = url.postRequest(rpc_url, cmd, ExecResult.class);
+        ExecResult response = writer.getObjectFromString(ExecResult.class, url.postRequest(rpc_url, cmd));
         assertEquals(200, response.getStatus());
 
         SendRawTransactionBatchCmd batch = new SendRawTransactionBatchCmd();
@@ -70,7 +72,7 @@ public class TransactionBroadcastTest {
         SendRawTransactionCmd cmd2 = new SendRawTransactionCmd(tx.getBytes(cryptoService, privateKey));
         txList.add(cmd2);
         batch.setBatch(txList);
-        ExecResult responseBatch = url.postRequest(rpc_url, batch, ExecResult.class);
+        ExecResult responseBatch = writer.getObjectFromString(ExecResult.class, url.postRequest(rpc_url, batch));
         assertEquals(200, responseBatch.getStatus());
     }
 
