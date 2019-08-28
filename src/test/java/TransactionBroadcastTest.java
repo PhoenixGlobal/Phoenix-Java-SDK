@@ -16,6 +16,7 @@ import java.math.BigInteger;
 import java.security.interfaces.ECPrivateKey;
 import java.time.Instant;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import static junit.framework.TestCase.assertEquals;
 
@@ -42,7 +43,8 @@ public class TransactionBroadcastTest {
         final GetAccountCmd getAccountCmd = new GetAccountCmd(CPXKey.getPublicAddressCPX(privateKey));
 
         final ExecResult responseAcc = url.postRequest(rpc_url, getAccountCmd, ExecResult.class);
-        final long nonce = (int) responseAcc.getResult().get("nextNonce");
+        HashMap<String, Object> responseMap = (HashMap<String, Object>) responseAcc.getResult();
+        final long nonce = (int) responseMap.get("nextNonce");
         final Transaction tx = Transaction.builder()
                 .txType(TransactionType.TRANSFER)
                 .fromPubKeyHash(fromHash)
