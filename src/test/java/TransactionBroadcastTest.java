@@ -1,6 +1,7 @@
 import crypto.CPXKey;
 import crypto.CryptoService;
 import message.request.cmd.GetAccountCmd;
+import message.request.cmd.SendRawTransactionBatchCmd;
 import message.request.cmd.SendRawTransactionCmd;
 import message.response.ExecResult;
 import message.transaction.FixedNumber;
@@ -14,6 +15,7 @@ import org.junit.Test;
 import java.math.BigInteger;
 import java.security.interfaces.ECPrivateKey;
 import java.time.Instant;
+import java.util.ArrayList;
 
 import static junit.framework.TestCase.assertEquals;
 
@@ -56,6 +58,18 @@ public class TransactionBroadcastTest {
         SendRawTransactionCmd cmd = new SendRawTransactionCmd(tx.getBytes(cryptoService, privateKey));
         ExecResult response = url.postRequest(rpc_url, cmd, ExecResult.class);
         assertEquals(200, response.getStatus());
+
+        SendRawTransactionBatchCmd batch = new SendRawTransactionBatchCmd();
+        ArrayList<SendRawTransactionCmd> txList = new ArrayList<>();
+        tx.setNonce(tx.getNonce() + 1L);
+        cmd = new SendRawTransactionCmd(tx.getBytes(cryptoService, privateKey));
+        txList.add(cmd);
+        tx.setNonce(tx.getNonce() + 1L);
+        SendRawTransactionCmd cmd2 = new SendRawTransactionCmd(tx.getBytes(cryptoService, privateKey));
+        txList.add(cmd2);
+        batch.setBatch(txList);
+        ExecResult responseBatch = url.postRequest(rpc_url, batch, ExecResult.class);
+        assertEquals(200, responseBatch.getStatus());
     }
 
 }

@@ -21,30 +21,43 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package message.request;
+package message.request.cmd;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.*;
+import message.request.IRPCMessage;
+import message.request.RPCPathName;
+import message.request.RequestMessageFields;
+
+import java.util.ArrayList;
 
 /**
- * This class provides valid RPC Path Endpoints 
+ * This class represents a RPC message to publish a batch of new transactions
  * @author Artem Eger
- * @since 16.08.2019
+ * @since 28.08.2019
  */
-public final class RPCPathName {
+@Getter
+@Setter
+@ToString
+@EqualsAndHashCode
+@NoArgsConstructor
+@AllArgsConstructor
+public class SendRawTransactionBatchCmd implements IRPCMessage {
 
-    public static final String GET_BLOCK = "getblock";
-    public static final String GET_BLOCK_MULTIPLE = "getblocks";
-    public static final String GET_BLOCK_HEIGHT = "getblockheight";
-    public static final String GET_BLOCK_INFO = "getLatesBlockInfo";
-    public static final String GET_PRODUCER = "getProducer";
-    public static final String GET_PRODUCER_ALL = "getProducers";
-    public static final String GET_PRODUCER_VOTE = "getProducerVotes";
-    public static final String GET_PROPOSAL = "getProposal";
-    public static final String GET_PROPOSAL_VOTE_ALL = "getAllProposalVote";
-    public static final String GET_PROPOSAL_ALL = "getAllProposal";
-    public static final String GET_AVG_GAS = "getAverageGasPrice";
-    public static final String GET_VOTE = "getVote";
-    public static final String SHOW_ACCOUNT = "showaccount";
-    public static final String GET_CONTRACT = "getContract";
-    public static final String SEND_RAW_TX = "sendrawtransaction";
-    public static final String SEND_RAW_TX_BATCH = "sendrawtransactions";
+    /**
+     * The tx batch
+     */
+    @JsonProperty(RequestMessageFields.MULTIPLE_TX)
+    @NonNull private ArrayList<SendRawTransactionCmd> batch;
+
+    /**
+     * @return target RPC Endpoint for this message
+     */
+    @JsonIgnore
+    @Override
+    public String getRpcPath() {
+        return RPCPathName.SEND_RAW_TX_BATCH;
+    }
 
 }
