@@ -24,6 +24,7 @@
 package message.request.cmd;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import lombok.*;
 import message.request.RPCPathName;
 import message.request.IRPCMessage;
@@ -39,6 +40,7 @@ import message.request.IRPCMessage;
 @ToString
 @EqualsAndHashCode
 @NoArgsConstructor
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "name")
 public class GetAvarageCmd implements IRPCMessage {
 
     /**

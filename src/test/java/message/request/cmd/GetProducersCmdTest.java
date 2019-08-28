@@ -22,7 +22,7 @@ public class GetProducersCmdTest {
 
     @Test
     public void validRPCMessageFromStringTest() throws IOException {
-        final String validJsonString = "{\"listType\" : \"list\"}";
+        final String validJsonString = "{\"name\": \"GetProducersCmd\", \"listType\" : \"list\"}";
         final GetProducersCmd classUnderTest = new GetProducersCmd("list");
         final GetProducersCmd msg = writer.getObjectFromString(GetProducersCmd.class, validJsonString);
         assertEquals(classUnderTest, msg);

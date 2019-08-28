@@ -22,7 +22,7 @@ public class GetProducerCmdTest {
 
     @Test
     public void validRPCMessageFromStringTest() throws IOException {
-        final String validJsonString = "{\"address\" : \"5487b77c71dd2730b8537cd28580da7d0f93d90dcf6753de110646897807fecf\"}";
+        final String validJsonString = "{\"name\": \"GetProducerCmd\", \"address\" : \"5487b77c71dd2730b8537cd28580da7d0f93d90dcf6753de110646897807fecf\"}";
         final GetProducerCmd classUnderTest = new GetProducerCmd("5487b77c71dd2730b8537cd28580da7d0f93d90dcf6753de110646897807fecf");
         final GetProducerCmd msg = writer.getObjectFromString(GetProducerCmd.class, validJsonString);
         assertEquals(classUnderTest, msg);
