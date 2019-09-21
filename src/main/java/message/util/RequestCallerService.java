@@ -24,7 +24,6 @@
 package message.util;
 
 import message.request.IRPCMessage;
-import message.response.ExecResult;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;

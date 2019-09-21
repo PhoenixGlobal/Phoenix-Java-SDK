@@ -53,6 +53,6 @@ public class ExecResult {
     @NonNull private String message;
 
     @JsonProperty(ResponseMessageFields.RESULT)
-    @NonNull private Object result;
+    @NonNull private HashMap<String, Object> result;
 
 }
