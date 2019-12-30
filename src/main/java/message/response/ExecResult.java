@@ -26,7 +26,6 @@ package message.response;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 
-import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -53,6 +52,6 @@ public class ExecResult {
     @NonNull private String message;
 
     @JsonProperty(ResponseMessageFields.RESULT)
-    @NonNull private HashMap<String, Object> result;
+    @NonNull private Map<String, Object> result;
 
 }
