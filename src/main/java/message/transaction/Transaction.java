@@ -23,14 +23,13 @@
  */
 package message.transaction;
 
-import crypto.CryptoService;
 import lombok.*;
 import org.bouncycastle.util.encoders.Hex;
 
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
+import java.io.IOException;
 import java.math.BigInteger;
-import java.security.PrivateKey;
 
 /**
  * This class represents a Transaction object
@@ -44,7 +43,7 @@ import java.security.PrivateKey;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Transaction {
+public class Transaction implements ISerialize {
 
     private int version;
 
@@ -68,8 +67,7 @@ public class Transaction {
 
     private long executeTime = 0L;
 
-    public byte[] getBytes(CryptoService cryptoService, PrivateKey privateKey) throws Exception {
-        byte [] signatureBytes;
+    public byte[] getBytes() throws IOException {
         try(ByteArrayOutputStream out  = new ByteArrayOutputStream()){
             try(DataOutputStream dataOut = new DataOutputStream(out)) {
                 dataOut.writeInt(this.version);
@@ -88,15 +86,6 @@ public class Transaction {
                 dataOut.write(this.gasLimit.toByteArray().length);
                 dataOut.write(this.gasLimit.toByteArray());
                 dataOut.writeLong(this.getExecuteTime());
-                signatureBytes = out.toByteArray();
-            }
-        }
-        this.signature = cryptoService.getSignature(privateKey, signatureBytes);
-        try(ByteArrayOutputStream out  = new ByteArrayOutputStream()) {
-            try (DataOutputStream obj = new DataOutputStream(out)) {
-                obj.write(signatureBytes);
-                obj.write(this.signature.length);
-                obj.write(this.signature);
                 return out.toByteArray();
             }
         }

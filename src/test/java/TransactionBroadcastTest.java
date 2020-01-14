@@ -59,17 +59,17 @@ public class TransactionBroadcastTest {
                 .version(1)
                 .executeTime(Instant.now().toEpochMilli())
                 .build();
-        SendRawTransactionCmd cmd = new SendRawTransactionCmd(tx.getBytes(cryptoService, privateKey));
+        SendRawTransactionCmd cmd = new SendRawTransactionCmd(cryptoService.signBytes(privateKey, tx));
         ExecResult response = writer.getObjectFromString(ExecResult.class, url.postRequest(rpc_url, cmd));
         assertEquals(200, response.getStatus());
 
         SendRawTransactionBatchCmd batch = new SendRawTransactionBatchCmd();
         ArrayList<SendRawTransactionCmd> txList = new ArrayList<>();
         tx.setNonce(tx.getNonce() + 1L);
-        cmd = new SendRawTransactionCmd(tx.getBytes(cryptoService, privateKey));
+        cmd = new SendRawTransactionCmd(cryptoService.signBytes(privateKey, tx));
         txList.add(cmd);
         tx.setNonce(tx.getNonce() + 1L);
-        SendRawTransactionCmd cmd2 = new SendRawTransactionCmd(tx.getBytes(cryptoService, privateKey));
+        SendRawTransactionCmd cmd2 = new SendRawTransactionCmd(cryptoService.signBytes(privateKey, tx));
         txList.add(cmd2);
         batch.setBatch(txList);
         ExecResult responseBatch = writer.getObjectFromString(ExecResult.class, url.postRequest(rpc_url, batch));
