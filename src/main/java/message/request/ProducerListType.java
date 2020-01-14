@@ -21,42 +21,20 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package message.request.cmd;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
-import lombok.*;
-import message.request.RPCPathName;
-import message.request.IRPCMessage;
-import message.request.RequestMessageFields;
+package message.request;
 
 /**
- * This class represents a RPC message to request a producer list
+ * This class defines valid list type identifiers for producer list requests {@link message.request.cmd.GetProducersCmd}
  * @author Artem Eger
  * @since 16.08.2019
  */
-@Getter
-@Setter
-@ToString
-@EqualsAndHashCode
-@AllArgsConstructor
-@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "name")
-public class GetProducersCmd implements IRPCMessage {
+public final class ProducerListType {
 
-    /**
-     * The requested list type. Valid types are defined in {@link message.request.ProducerListType}
-     */
-    @JsonProperty(RequestMessageFields.LIST_TYPE)
-    @NonNull private String listType;
+    private ProducerListType(){}
 
-    /**
-     * @return target RPC Endpoint for this message
-     */
-    @JsonIgnore
-    @Override
-    public String getRpcPath() {
-        return RPCPathName.GET_PRODUCER_ALL;
-    }
+    public static final String ALL = "all";
+    public static final String ACTIVE ="active";
+    public static final String PENDING ="pending";
+    public static final String PREVIOUS ="previous";
 
 }

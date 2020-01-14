@@ -30,6 +30,8 @@ package message.request;
  */
 public final class RPCPathName {
 
+    private RPCPathName(){}
+
     public static final String GET_BLOCK = "getblock";
     public static final String GET_BLOCK_MULTIPLE = "getblocks";
     public static final String GET_BLOCK_HEIGHT = "getblockheight";
