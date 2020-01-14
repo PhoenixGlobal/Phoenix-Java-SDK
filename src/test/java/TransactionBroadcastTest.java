@@ -37,7 +37,6 @@ public class TransactionBroadcastTest {
         final CryptoService cryptoService = new CryptoService();
         final RequestCallerService url = new RequestCallerService();
         final ECPrivateKey privateKey = cryptoService.getECPrivateKeyFromRawString(privKeyRaw);
-        final String fromHash = CPXKey.getScriptHash(privateKey);
         final String toHash = CPXKey.getScriptHashFromCPXAddress("APEt5ThLdoXiMGQkDmGnfY271vJrii5LxxM");
         final GetAccountCmd getAccountCmd = new GetAccountCmd(CPXKey.getPublicAddressCPX(privateKey));
         final GenericJacksonWriter writer = new GenericJacksonWriter();
@@ -65,6 +64,7 @@ public class TransactionBroadcastTest {
         batch.setBatch(txList);
         ExecResult responseBatch = writer.getObjectFromString(ExecResult.class, url.postRequest(rpc_url, batch));
         assertEquals(200, responseBatch.getStatus());
+
     }
 
 }
