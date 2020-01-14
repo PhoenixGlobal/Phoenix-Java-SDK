@@ -21,22 +21,18 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package message.transaction;
+package message.transaction.payload;
 
 /**
- * This class defines valid {@link Transaction} type identifiers
+ * This class defines valid Operation type identifiers
  * @author Artem Eger
  * @since 17.08.2019
  */
-public final class TransactionType {
+public final class OperationType {
 
-    private TransactionType(){}
+    private OperationType(){}
 
-    public static final byte MINER = 0x00;
-    public static final byte TRANSFER = 0x01;
-    public static final byte DEPLOY = 0x02;
-    public static final byte CALL = 0x03;
-    public static final byte REFUND = 0x04;
-    public static final byte SCHEDULE = 0x05;
+    public static final byte REGISTER = 0x00;
+    public static final byte REGISTER_CANCEL = 0x01;
 
 }

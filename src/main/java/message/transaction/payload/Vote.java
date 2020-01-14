@@ -21,16 +21,42 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package message.transaction;
+package message.transaction.payload;
 
-/**
- * This class defines valid Operation type identifiers
- * @author Artem Eger
- * @since 17.08.2019
- */
-public final class OperationType {
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.Setter;
+import message.transaction.FixedNumber;
+import message.transaction.ISerialize;
+import org.bouncycastle.util.encoders.Hex;
 
-    public static final byte REGISTER = 0x00;
-    public static final byte REGISTER_CANCEL = 0x01;
+import java.io.ByteArrayOutputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+
+@Getter
+@Setter
+@AllArgsConstructor
+@Builder
+public class Vote implements ISerialize {
+
+    private String voterPubKeyHash;
+
+    private FixedNumber amount;
+
+    private byte operationType;
+
+    @Override
+    public byte[] getBytes() throws IOException {
+        try(ByteArrayOutputStream out  = new ByteArrayOutputStream()){
+            try(DataOutputStream dataOut = new DataOutputStream(out)) {
+                dataOut.write(Hex.decode(this.voterPubKeyHash));
+                dataOut.write(this.amount.getBytes());
+                dataOut.writeByte(this.operationType);
+                return out.toByteArray();
+            }
+        }
+    }
 
 }

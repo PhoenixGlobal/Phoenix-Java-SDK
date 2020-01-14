@@ -39,7 +39,7 @@ import java.math.BigInteger;
  */
 @Getter
 @Setter
-public class FixedNumber {
+public class FixedNumber implements ISerialize {
 
     public final static long ZERO_VALUE = 0L;
     public final static long MIN_VALUE = 1L;
