@@ -41,6 +41,8 @@ import java.io.IOException;
 @Builder
 public class Vote implements ISerialize {
 
+    public static final String SCRIPT_HASH = "47f728eeaf651640a8e8df44a6cd53b6248c83ff";
+
     private String voterPubKeyHash;
 
     private FixedNumber amount;
