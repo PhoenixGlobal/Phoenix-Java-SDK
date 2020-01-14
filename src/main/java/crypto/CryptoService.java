@@ -23,6 +23,7 @@
  */
 package crypto;
 
+import message.transaction.ISerialize;
 import org.bouncycastle.asn1.x500.X500Name;
 import org.bouncycastle.cert.X509CertificateHolder;
 import org.bouncycastle.cert.X509v3CertificateBuilder;
@@ -42,9 +43,7 @@ import org.bouncycastle.math.ec.ECPoint;
 import org.bouncycastle.operator.ContentSigner;
 import org.bouncycastle.operator.jcajce.JcaContentSignerBuilder;
 
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.InputStream;
+import java.io.*;
 import java.math.BigInteger;
 import java.security.*;
 import java.security.cert.X509Certificate;
@@ -60,7 +59,7 @@ import java.util.Date;
  * @author Artem Eger
  * @since 18.08.2019
  */
-public final class CryptoService {
+public class CryptoService {
 
     static final String EC_CURVE = "secp256r1";
     private static final String KEYSTORE_FORMAT = "UBER";
@@ -83,16 +82,16 @@ public final class CryptoService {
 
     public void generateKeystore(String keyStoreName, String password, String keyName) throws Exception {
         final ECNamedCurveParameterSpec ecGenSpec = ECNamedCurveTable.getParameterSpec(EC_CURVE);
-        KeyPairGenerator g = KeyPairGenerator.getInstance(ALGORITHM, PROVIDER);
+        final KeyPairGenerator g = KeyPairGenerator.getInstance(ALGORITHM, PROVIDER);
         g.initialize(ecGenSpec, new SecureRandom());
         final KeyPair keyPair = g.generateKeyPair();
         keyPairToKeyStore(keyStoreName, password, keyName, keyPair);
     }
 
     public void keyPairToKeyStore(String keyStoreName, String password, String keyName, KeyPair keyPair) throws Exception {
-        KeyStore keyStore = KeyStore.getInstance(KEYSTORE_FORMAT);
+        final KeyStore keyStore = KeyStore.getInstance(KEYSTORE_FORMAT);
         keyStore.load(null, password.toCharArray());
-        X509Certificate[] certificateChain = new X509Certificate[1];
+        final X509Certificate[] certificateChain = new X509Certificate[1];
         certificateChain[0] = generateCertificate(keyPair);
         keyStore.setKeyEntry(keyName, keyPair.getPrivate(), password.toCharArray(), certificateChain);
         try (FileOutputStream fos = new FileOutputStream(keyStoreName + KEYSTORE_FILE_FORMAT)) {
@@ -120,7 +119,7 @@ public final class CryptoService {
     }
 
     public KeyPair loadKeyPairFromKeyStore(String filename, String password, String keyName) throws Exception {
-        KeyStore keyStore = KeyStore.getInstance(KEYSTORE_FORMAT);
+        final KeyStore keyStore = KeyStore.getInstance(KEYSTORE_FORMAT);
         try(InputStream in = new FileInputStream(filename)){
             keyStore.load(in, password.toCharArray());
         }
@@ -131,17 +130,32 @@ public final class CryptoService {
     }
 
     public byte[] getSignature(PrivateKey privateKey, byte[] data) throws Exception {
-        Signature signature = Signature.getInstance(SIGNER_ALGORITHM, PROVIDER);
+        final Signature signature = Signature.getInstance(SIGNER_ALGORITHM, PROVIDER);
         signature.initSign(privateKey);
         signature.update(data);
         return signature.sign();
     }
 
     public boolean verifySignature(PublicKey publicKey, byte[] data, byte[] signatureBytes) throws Exception {
-        Signature signature = Signature.getInstance(SIGNER_ALGORITHM, PROVIDER);
+        final Signature signature = Signature.getInstance(SIGNER_ALGORITHM, PROVIDER);
         signature.initVerify(publicKey);
         signature.update(data);
         return signature.verify(signatureBytes);
+    }
+
+    public byte[] signBytes(PrivateKey privateKey, ISerialize objToSign) throws Exception {
+        final Signature signature = Signature.getInstance(SIGNER_ALGORITHM, PROVIDER);
+        signature.initSign(privateKey);
+        signature.update(objToSign.getBytes());
+        final byte[] signatureBytes = signature.sign();
+        try(ByteArrayOutputStream out  = new ByteArrayOutputStream()) {
+            try (DataOutputStream obj = new DataOutputStream(out)) {
+                obj.write(objToSign.getBytes());
+                obj.write(signatureBytes.length);
+                obj.write(signatureBytes);
+                return out.toByteArray();
+            }
+        }
     }
 
     public PublicKey encodedToPublicKey(byte[] bytes) throws Exception {

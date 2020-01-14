@@ -40,13 +40,12 @@ import message.request.RequestMessageFields;
 @Setter
 @ToString
 @EqualsAndHashCode
-@NoArgsConstructor
 @AllArgsConstructor
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "name")
 public class GetProducersCmd implements IRPCMessage {
 
     /**
-     * The requested list type
+     * The requested list type. Valid types are defined in {@link message.request.ProducerListType}
      */
     @JsonProperty(RequestMessageFields.LIST_TYPE)
     @NonNull private String listType;

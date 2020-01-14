@@ -21,71 +21,72 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package message.transaction;
+package message.transaction.payload;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.Setter;
+import message.transaction.FixedNumber;
+import message.transaction.ISerialize;
 import org.bouncycastle.util.encoders.Hex;
 
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
-import java.math.BigInteger;
 
-/**
- * This class represents a Transaction object
- * @author Artem Eger
- * @since 17.08.2019
- */
 @Getter
 @Setter
-@ToString
-@EqualsAndHashCode
-@Builder
-@NoArgsConstructor
 @AllArgsConstructor
-public class Transaction implements ISerialize {
+@Builder
+public class Registration implements ISerialize {
 
-    private int version;
-
-    private byte txType;
+    public static final String SCRIPT_HASH = "4bf81ec1b8714802bf78bb9f87779150b4f10b63";
 
     private String fromPubKeyHash;
 
-    private String toPubKeyHash;
+    private byte version;
 
-    private FixedNumber amount;
+    private boolean genesisWitness;
 
-    private long nonce;
+    private String name;
 
-    private byte [] data = new byte[1];
+    private String url;
 
-    private FixedNumber gasPrice;
+    private String country;
 
-    private BigInteger gasLimit;
+    private String address;
 
-    private byte [] signature;
+    private int longitude;
 
-    private long executeTime = 0L;
+    private int latitude;
 
+    private FixedNumber voteCounts;
+
+    private boolean register;
+
+    private boolean frozen;
+
+    private byte operationType;
+
+    @Override
     public byte[] getBytes() throws IOException {
         try(ByteArrayOutputStream out  = new ByteArrayOutputStream()){
             try(DataOutputStream dataOut = new DataOutputStream(out)) {
-                dataOut.writeInt(this.version);
-                dataOut.writeByte(this.txType);
                 dataOut.write(Hex.decode(this.fromPubKeyHash));
-                dataOut.write(Hex.decode(this.toPubKeyHash));
-                dataOut.write(this.getAmount().getBytes());
-                dataOut.writeLong(this.nonce);
-                if(this.data.length <= 1) {
-                    dataOut.write(new byte[1]);
-                } else {
-                    dataOut.write(this.getData().length);
-                    dataOut.write(this.getData());
-                }
-                dataOut.write(this.getGasPrice().getBytes());
-                dataOut.write(this.gasLimit.toByteArray().length);
-                dataOut.write(this.gasLimit.toByteArray());
-                dataOut.writeLong(this.getExecuteTime());
+                dataOut.writeInt(this.version);
+                dataOut.write(Hex.decode(this.fromPubKeyHash));
+                dataOut.writeBoolean(this.genesisWitness);
+                dataOut.writeBytes(this.name);
+                dataOut.writeBytes(this.url);
+                dataOut.writeBytes(this.country);
+                dataOut.writeBytes(this.address);
+                dataOut.writeInt(this.longitude);
+                dataOut.writeInt(this.latitude);
+                dataOut.write(this.voteCounts.getBytes());
+                dataOut.writeBoolean(this.register);
+                dataOut.writeBoolean(this.frozen);
+                dataOut.write(operationType);
                 return out.toByteArray();
             }
         }

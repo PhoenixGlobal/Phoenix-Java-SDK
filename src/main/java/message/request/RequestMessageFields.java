@@ -30,6 +30,8 @@ package message.request;
  */
 public final class RequestMessageFields {
 
+    private RequestMessageFields(){}
+
     public static final String HEIGHT = "height";
     public static final String HASH = "hash";
     public static final String ID = "id";

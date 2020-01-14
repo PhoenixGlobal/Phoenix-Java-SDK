@@ -23,14 +23,16 @@
  */
 package message.transaction;
 
-/**
- * This class defines valid Operation type identifiers
- * @author Artem Eger
- * @since 17.08.2019
- */
-public final class OperationType {
+public enum TxObj {
 
-    public static final byte REGISTER = 0x00;
-    public static final byte REGISTER_CANCEL = 0x01;
+    TRANSFER,
+    REFUND,
+    DEPLOY,
+    SCHEDULE,
+    CALL,
+    VOTE,
+    CANCEL_VOTE,
+    REGISTER,
+    CANCEL_REGISTER
 
 }

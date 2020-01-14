@@ -23,20 +23,15 @@
  */
 package message.transaction;
 
-/**
- * This class defines valid {@link Transaction} type identifiers
- * @author Artem Eger
- * @since 17.08.2019
- */
-public final class TransactionType {
+import java.io.IOException;
+import java.security.interfaces.ECPrivateKey;
 
-    private TransactionType(){}
+@FunctionalInterface
+public interface IProduceTransaction {
 
-    public static final byte MINER = 0x00;
-    public static final byte TRANSFER = 0x01;
-    public static final byte DEPLOY = 0x02;
-    public static final byte CALL = 0x03;
-    public static final byte REFUND = 0x04;
-    public static final byte SCHEDULE = 0x05;
+    Transaction create(final TxObj objType, final ECPrivateKey privateKey,
+                       final ISerialize payload, final String target,
+                       final long nonce, final double amount,
+                       final double gasPrice, final long gasLimit) throws IOException;
 
 }

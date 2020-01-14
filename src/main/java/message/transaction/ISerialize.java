@@ -23,20 +23,16 @@
  */
 package message.transaction;
 
+import java.io.IOException;
+
 /**
- * This class defines valid {@link Transaction} type identifiers
+ * This interface should be implemented by classes that have a byte representation
  * @author Artem Eger
- * @since 17.08.2019
+ * @since 13.01.2020
  */
-public final class TransactionType {
+@FunctionalInterface
+public interface ISerialize {
 
-    private TransactionType(){}
-
-    public static final byte MINER = 0x00;
-    public static final byte TRANSFER = 0x01;
-    public static final byte DEPLOY = 0x02;
-    public static final byte CALL = 0x03;
-    public static final byte REFUND = 0x04;
-    public static final byte SCHEDULE = 0x05;
+    byte[] getBytes() throws IOException;
 
 }

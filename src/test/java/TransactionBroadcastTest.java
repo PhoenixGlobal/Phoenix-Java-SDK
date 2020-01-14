@@ -4,9 +4,7 @@ import message.request.cmd.GetAccountCmd;
 import message.request.cmd.SendRawTransactionBatchCmd;
 import message.request.cmd.SendRawTransactionCmd;
 import message.response.ExecResult;
-import message.transaction.FixedNumber;
-import message.transaction.Transaction;
-import message.transaction.TransactionType;
+import message.transaction.*;
 import message.util.GenericJacksonWriter;
 import message.util.RequestCallerService;
 
@@ -39,41 +37,34 @@ public class TransactionBroadcastTest {
         final CryptoService cryptoService = new CryptoService();
         final RequestCallerService url = new RequestCallerService();
         final ECPrivateKey privateKey = cryptoService.getECPrivateKeyFromRawString(privKeyRaw);
-        final String fromHash = CPXKey.getScriptHash(privateKey);
         final String toHash = CPXKey.getScriptHashFromCPXAddress("APEt5ThLdoXiMGQkDmGnfY271vJrii5LxxM");
         final GetAccountCmd getAccountCmd = new GetAccountCmd(CPXKey.getPublicAddressCPX(privateKey));
         final GenericJacksonWriter writer = new GenericJacksonWriter();
+        final IProduceTransaction txFactory = new TransactionFactory();
 
         final ExecResult responseAcc = writer.getObjectFromString(ExecResult.class, url.postRequest(rpc_url, getAccountCmd));
         HashMap<String, Object> responseMap = (HashMap<String, Object>) responseAcc.getResult();
         final long nonce = (int) responseMap.get("nextNonce");
-        final Transaction tx = Transaction.builder()
-                .txType(TransactionType.TRANSFER)
-                .fromPubKeyHash(fromHash)
-                .toPubKeyHash(toHash)
-                .amount(new FixedNumber(1.2))
-                .nonce(nonce)
-                .data(new byte[0])
-                .gasPrice(new FixedNumber(0.0000003))
-                .gasLimit(BigInteger.valueOf(300000L))
-                .version(1)
-                .executeTime(Instant.now().toEpochMilli())
-                .build();
-        SendRawTransactionCmd cmd = new SendRawTransactionCmd(tx.getBytes(cryptoService, privateKey));
+
+        final Transaction tx = txFactory.create(TxObj.TRANSFER, privateKey, () -> new byte[0],
+                toHash, nonce, 1.2, 0.0000003, 300000L);
+
+        SendRawTransactionCmd cmd = new SendRawTransactionCmd(cryptoService.signBytes(privateKey, tx));
         ExecResult response = writer.getObjectFromString(ExecResult.class, url.postRequest(rpc_url, cmd));
         assertEquals(200, response.getStatus());
 
         SendRawTransactionBatchCmd batch = new SendRawTransactionBatchCmd();
         ArrayList<SendRawTransactionCmd> txList = new ArrayList<>();
         tx.setNonce(tx.getNonce() + 1L);
-        cmd = new SendRawTransactionCmd(tx.getBytes(cryptoService, privateKey));
+        cmd = new SendRawTransactionCmd(cryptoService.signBytes(privateKey, tx));
         txList.add(cmd);
         tx.setNonce(tx.getNonce() + 1L);
-        SendRawTransactionCmd cmd2 = new SendRawTransactionCmd(tx.getBytes(cryptoService, privateKey));
+        SendRawTransactionCmd cmd2 = new SendRawTransactionCmd(cryptoService.signBytes(privateKey, tx));
         txList.add(cmd2);
         batch.setBatch(txList);
         ExecResult responseBatch = writer.getObjectFromString(ExecResult.class, url.postRequest(rpc_url, batch));
         assertEquals(200, responseBatch.getStatus());
+
     }
 
 }

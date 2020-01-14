@@ -21,22 +21,20 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package message.transaction;
+package message.request;
 
 /**
- * This class defines valid {@link Transaction} type identifiers
+ * This class defines valid list type identifiers for producer list requests {@link message.request.cmd.GetProducersCmd}
  * @author Artem Eger
- * @since 17.08.2019
+ * @since 16.08.2019
  */
-public final class TransactionType {
+public final class ProducerListType {
 
-    private TransactionType(){}
+    private ProducerListType(){}
 
-    public static final byte MINER = 0x00;
-    public static final byte TRANSFER = 0x01;
-    public static final byte DEPLOY = 0x02;
-    public static final byte CALL = 0x03;
-    public static final byte REFUND = 0x04;
-    public static final byte SCHEDULE = 0x05;
+    public static final String ALL = "all";
+    public static final String ACTIVE ="active";
+    public static final String PENDING ="pending";
+    public static final String PREVIOUS ="previous";
 
 }

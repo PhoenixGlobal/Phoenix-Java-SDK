@@ -21,22 +21,44 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package message.transaction;
+package message.transaction.payload;
 
-/**
- * This class defines valid {@link Transaction} type identifiers
- * @author Artem Eger
- * @since 17.08.2019
- */
-public final class TransactionType {
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.Setter;
+import message.transaction.FixedNumber;
+import message.transaction.ISerialize;
+import org.bouncycastle.util.encoders.Hex;
 
-    private TransactionType(){}
+import java.io.ByteArrayOutputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
 
-    public static final byte MINER = 0x00;
-    public static final byte TRANSFER = 0x01;
-    public static final byte DEPLOY = 0x02;
-    public static final byte CALL = 0x03;
-    public static final byte REFUND = 0x04;
-    public static final byte SCHEDULE = 0x05;
+@Getter
+@Setter
+@AllArgsConstructor
+@Builder
+public class Vote implements ISerialize {
+
+    public static final String SCRIPT_HASH = "47f728eeaf651640a8e8df44a6cd53b6248c83ff";
+
+    private String voterPubKeyHash;
+
+    private FixedNumber amount;
+
+    private byte operationType;
+
+    @Override
+    public byte[] getBytes() throws IOException {
+        try(ByteArrayOutputStream out  = new ByteArrayOutputStream()){
+            try(DataOutputStream dataOut = new DataOutputStream(out)) {
+                dataOut.write(Hex.decode(this.voterPubKeyHash));
+                dataOut.write(this.amount.getBytes());
+                dataOut.writeByte(this.operationType);
+                return out.toByteArray();
+            }
+        }
+    }
 
 }
