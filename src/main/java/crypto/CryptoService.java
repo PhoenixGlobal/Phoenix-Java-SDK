@@ -42,6 +42,7 @@ import org.bouncycastle.jce.spec.ECPublicKeySpec;
 import org.bouncycastle.math.ec.ECPoint;
 import org.bouncycastle.operator.ContentSigner;
 import org.bouncycastle.operator.jcajce.JcaContentSignerBuilder;
+import org.bouncycastle.util.encoders.Hex;
 
 import java.io.*;
 import java.math.BigInteger;
@@ -69,6 +70,7 @@ public class CryptoService {
     private static final String PROVIDER = "BC";
     private static final String SIGNER_ALGORITHM = "SHA256withECDSA";
 
+    public static final String KEY_NAME = "cpxkey";
     public static final MessageDigest ripeMd160 = new RIPEMD160.Digest();
     public static final MessageDigest sha256 = new SHA256.Digest();
     public static final MessageDigest keccak256 = new Keccak.Digest256();
@@ -80,26 +82,24 @@ public class CryptoService {
         Security.addProvider(new BouncyCastleProvider());
     }
 
-    public void generateKeystore(String keyStoreName, String password, String keyName) throws Exception {
+    public KeyStore generateKeystore(String password) throws Exception {
         final ECNamedCurveParameterSpec ecGenSpec = ECNamedCurveTable.getParameterSpec(EC_CURVE);
         final KeyPairGenerator g = KeyPairGenerator.getInstance(ALGORITHM, PROVIDER);
         g.initialize(ecGenSpec, new SecureRandom());
         final KeyPair keyPair = g.generateKeyPair();
-        keyPairToKeyStore(keyStoreName, password, keyName, keyPair);
+        return keyPairToKeyStore(password, KEY_NAME, keyPair);
     }
 
-    public void keyPairToKeyStore(String keyStoreName, String password, String keyName, KeyPair keyPair) throws Exception {
+    public KeyStore keyPairToKeyStore(String password, String keyName, KeyPair keyPair) throws Exception {
         final KeyStore keyStore = KeyStore.getInstance(KEYSTORE_FORMAT);
         keyStore.load(null, password.toCharArray());
         final X509Certificate[] certificateChain = new X509Certificate[1];
         certificateChain[0] = generateCertificate(keyPair);
         keyStore.setKeyEntry(keyName, keyPair.getPrivate(), password.toCharArray(), certificateChain);
-        try (FileOutputStream fos = new FileOutputStream(keyStoreName + KEYSTORE_FILE_FORMAT)) {
-            keyStore.store(fos, password.toCharArray());
-        }
+        return keyStore;
     }
 
-    public void generateKeyStoreFromRawString(String keyStoreName, String password, String keyName, String raw) throws Exception {
+    public KeyStore generateKeyStoreFromRawString(String password, String keyName, String raw) throws Exception {
         final ECPrivateKey privateKey = getECPrivateKeyFromRawString(raw);
         final BCECPrivateKey bcec = (BCECPrivateKey) privateKey;
         final KeyFactory kf = KeyFactory.getInstance(ALGORITHM, PROVIDER);
@@ -109,18 +109,30 @@ public class CryptoService {
         final ECPublicKeySpec pubSpec = new ECPublicKeySpec(point, ecSpec);
         final ECPublicKey publicKey = (ECPublicKey) kf.generatePublic(pubSpec);
         final KeyPair keyPair = new KeyPair(publicKey, privateKey);
-        keyPairToKeyStore(keyStoreName, password, keyName, keyPair);
+        return keyPairToKeyStore(password, keyName, keyPair);
     }
 
-    public ECPrivateKey getECPrivateKeyFromRawString(String raw) throws Exception {
+    public KeyStore generateKeyStoreFromMnemonic(final String password, final String mnemonic) throws Exception {
+        final String rawKey = Hex.toHexString(MnemonicUtils.generateEntropy(mnemonic));
+        final ECPrivateKey privateKey = getECPrivateKeyFromRawString(rawKey);
+        return generateKeyStoreFromRawString(password, KEY_NAME, rawKey);
+    }
+
+    public KeyStore generateKeyStoreFromWif(final String password, final String wif) throws Exception {
+        final String rawKey = CPXKey.getRawFromWIF(wif);
+        final ECPrivateKey privateKey = getECPrivateKeyFromRawString(rawKey);
+        return generateKeyStoreFromRawString(password, KEY_NAME, rawKey);
+    }
+
+    public ECPrivateKey getECPrivateKeyFromRawString(final String raw) throws Exception {
         final ECPrivateKeySpec ecPrivateKeySpec = new ECPrivateKeySpec(new BigInteger(raw, 16), params);
         final KeyFactory kf = KeyFactory.getInstance(ALGORITHM, PROVIDER);
         return (ECPrivateKey) kf.generatePrivate(ecPrivateKeySpec);
     }
 
-    public KeyPair loadKeyPairFromKeyStore(String filename, String password, String keyName) throws Exception {
+    public KeyPair loadKeyPairFromKeyStore(final byte [] keystoreBytes, final String password, final String keyName) throws Exception {
         final KeyStore keyStore = KeyStore.getInstance(KEYSTORE_FORMAT);
-        try(InputStream in = new FileInputStream(filename)){
+        try(InputStream in = new ByteArrayInputStream(keystoreBytes)){
             keyStore.load(in, password.toCharArray());
         }
         final PrivateKey privateKey = (PrivateKey) keyStore.getKey(keyName, password.toCharArray());
@@ -129,7 +141,7 @@ public class CryptoService {
         return new KeyPair(publicKey, privateKey);
     }
 
-    public byte[] getSignature(PrivateKey privateKey, byte[] data) throws Exception {
+    public byte[] getSignature(final PrivateKey privateKey, final byte[] data) throws Exception {
         final Signature signature = Signature.getInstance(SIGNER_ALGORITHM, PROVIDER);
         signature.initSign(privateKey);
         signature.update(data);
@@ -143,7 +155,7 @@ public class CryptoService {
         return signature.verify(signatureBytes);
     }
 
-    public byte[] signBytes(PrivateKey privateKey, ISerialize objToSign) throws Exception {
+    public byte[] signBytes(final PrivateKey privateKey, final ISerialize objToSign) throws Exception {
         final Signature signature = Signature.getInstance(SIGNER_ALGORITHM, PROVIDER);
         signature.initSign(privateKey);
         signature.update(objToSign.getBytes());
@@ -158,13 +170,13 @@ public class CryptoService {
         }
     }
 
-    public PublicKey encodedToPublicKey(byte[] bytes) throws Exception {
+    public PublicKey encodedToPublicKey(final byte[] bytes) throws Exception {
         KeyFactory factory = KeyFactory.getInstance(ALGORITHM, PROVIDER);
         X509EncodedKeySpec x509EncodedKeySpec = new X509EncodedKeySpec(bytes);
         return factory.generatePublic(x509EncodedKeySpec);
     }
 
-    private X509Certificate generateCertificate(KeyPair keyPair) throws Exception {
+    private X509Certificate generateCertificate(final KeyPair keyPair) throws Exception {
         Calendar calendar = Calendar.getInstance();
         Date validFrom = calendar.getTime();
         calendar.add(Calendar.YEAR, 1000);
