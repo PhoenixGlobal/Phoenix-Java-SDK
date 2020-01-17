@@ -82,7 +82,7 @@ public class CryptoService {
         Security.addProvider(new BouncyCastleProvider());
     }
 
-    public KeyStore generateKeystore(String password) throws Exception {
+    public KeyStore generateKeystore(final String password) throws Exception {
         final ECNamedCurveParameterSpec ecGenSpec = ECNamedCurveTable.getParameterSpec(EC_CURVE);
         final KeyPairGenerator g = KeyPairGenerator.getInstance(ALGORITHM, PROVIDER);
         g.initialize(ecGenSpec, new SecureRandom());
@@ -90,7 +90,7 @@ public class CryptoService {
         return keyPairToKeyStore(password, KEY_NAME, keyPair);
     }
 
-    public KeyStore keyPairToKeyStore(String password, String keyName, KeyPair keyPair) throws Exception {
+    public KeyStore keyPairToKeyStore(final String password, final String keyName, final KeyPair keyPair) throws Exception {
         final KeyStore keyStore = KeyStore.getInstance(KEYSTORE_FORMAT);
         keyStore.load(null, password.toCharArray());
         final X509Certificate[] certificateChain = new X509Certificate[1];
@@ -99,7 +99,7 @@ public class CryptoService {
         return keyStore;
     }
 
-    public KeyStore generateKeyStoreFromRawString(String password, String keyName, String raw) throws Exception {
+    public KeyStore generateKeyStoreFromRawString(final String password, final String keyName, final String raw) throws Exception {
         final ECPrivateKey privateKey = getECPrivateKeyFromRawString(raw);
         final BCECPrivateKey bcec = (BCECPrivateKey) privateKey;
         final KeyFactory kf = KeyFactory.getInstance(ALGORITHM, PROVIDER);
@@ -114,13 +114,11 @@ public class CryptoService {
 
     public KeyStore generateKeyStoreFromMnemonic(final String password, final String mnemonic) throws Exception {
         final String rawKey = Hex.toHexString(MnemonicUtils.generateEntropy(mnemonic));
-        final ECPrivateKey privateKey = getECPrivateKeyFromRawString(rawKey);
         return generateKeyStoreFromRawString(password, KEY_NAME, rawKey);
     }
 
     public KeyStore generateKeyStoreFromWif(final String password, final String wif) throws Exception {
         final String rawKey = CPXKey.getRawFromWIF(wif);
-        final ECPrivateKey privateKey = getECPrivateKeyFromRawString(rawKey);
         return generateKeyStoreFromRawString(password, KEY_NAME, rawKey);
     }
 
@@ -148,7 +146,7 @@ public class CryptoService {
         return signature.sign();
     }
 
-    public boolean verifySignature(PublicKey publicKey, byte[] data, byte[] signatureBytes) throws Exception {
+    public boolean verifySignature(final PublicKey publicKey, final byte[] data, final byte[] signatureBytes) throws Exception {
         final Signature signature = Signature.getInstance(SIGNER_ALGORITHM, PROVIDER);
         signature.initVerify(publicKey);
         signature.update(data);
@@ -194,27 +192,27 @@ public class CryptoService {
         return cert;
     }
 
-    public static byte[] getRIPEMD160(byte [] bytes) {
+    public static byte[] getRIPEMD160(final byte [] bytes) {
         return ripeMd160.digest(sha256.digest(bytes));
     }
 
-    public static byte [] getRIPEMD160(String str) {
+    public static byte [] getRIPEMD160(final String str) {
         return ripeMd160.digest(sha256.digest(str.getBytes()));
     }
 
-    public static byte[] getSHA256(byte [] bytes) {
+    public static byte[] getSHA256(final byte [] bytes) {
         return sha256.digest(sha256.digest(bytes));
     }
 
-    public static byte[] getSHA256(String str) {
+    public static byte[] getSHA256(final String str) {
         return sha256.digest(sha256.digest(str.getBytes()));
     }
 
-    public static byte[] getKeccak(byte [] bytes){
+    public static byte[] getKeccak(final byte [] bytes){
         return keccak256.digest(sha256.digest(bytes));
     }
 
-    public static byte[] getKeccak(String str){
+    public static byte[] getKeccak(final String str){
         return keccak256.digest(sha256.digest(str.getBytes()));
     }
 
