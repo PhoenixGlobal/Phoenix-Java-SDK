@@ -30,6 +30,7 @@ import org.bouncycastle.util.Arrays;
 import org.bouncycastle.util.encoders.Hex;
 
 import java.io.ByteArrayOutputStream;
+import java.security.SecureRandom;
 import java.security.interfaces.ECPrivateKey;
 
 /**
@@ -47,13 +48,13 @@ public final class CPXKey {
     private static final String SCRIPT_PREFIX = "21";
     private static final String SCRIPT_POSTFIX = "ac";
 
-    public static String getPrivKeyRaw(ECPrivateKey privateKey){
+    public static String getPrivKeyRaw(final ECPrivateKey privateKey){
         String privKeyRaw = Hex.toHexString(privateKey.getS().toByteArray());
         if(privKeyRaw.startsWith("00")) privKeyRaw = privKeyRaw.substring(2);
         return privKeyRaw;
     }
 
-    public static String getPrivKeyWIF(ECPrivateKey privateKey) throws Exception {
+    public static String getPrivKeyWIF(final ECPrivateKey privateKey) throws Exception {
         final String privKeyRaw = CPXKey.getPrivKeyRaw(privateKey);
         byte [] wifBytes;
         try(ByteArrayOutputStream out = new ByteArrayOutputStream()) {
@@ -63,6 +64,10 @@ public final class CPXKey {
             wifBytes = out.toByteArray();
         }
         return Base58.encodeChecked(wifBytes);
+    }
+
+    public static String generateMnemonic(){
+        return MnemonicUtils.generateMnemonic(new SecureRandom().generateSeed(32));
     }
 
     public static String getPubKeyCompressed(ECPrivateKey privateKey){
