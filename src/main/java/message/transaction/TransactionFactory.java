@@ -64,8 +64,8 @@ public class TransactionFactory implements IProduceTransaction {
                 .amount(new FixedNumber(amount))
                 .nonce(nonce)
                 .data(payload.getBytes())
-                .gasPrice(new FixedNumber(gasPrice))
-                .gasLimit(BigInteger.valueOf(gasLimit))
+                .gasPrice(new FixedNumber(new FixedNumber(gasPrice).getValue().multiply(FixedNumber.KGP).doubleValue()))
+                .gasLimit(BigInteger.valueOf(gasLimit).multiply(FixedNumber.KGP))
                 .version(1)
                 .executeTime(Instant.now().toEpochMilli())
                 .build();
