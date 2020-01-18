@@ -32,6 +32,6 @@ public interface IProduceTransaction {
     Transaction create(final TxObj objType, final ECPrivateKey privateKey,
                        final ISerialize payload, final String target,
                        final long nonce, final double amount,
-                       final double gasPrice, final double gasLimit) throws IOException;
+                       final double gasPrice, final long gasLimit) throws IOException;
 
 }
