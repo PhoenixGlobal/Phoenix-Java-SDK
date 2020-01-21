@@ -41,7 +41,8 @@ import java.io.IOException;
 @Builder
 public class Registration implements ISerialize {
 
-    public static final String SCRIPT_HASH = "4bf81ec1b8714802bf78bb9f87779150b4f10b63";
+    // AP1xWDozWvuVah1W86DKtcWzdw1LqCFuExk
+    public static final String SCRIPT_HASH = "0000000000000000000000000000000000000101";
 
     private String fromPubKeyHash;
 
