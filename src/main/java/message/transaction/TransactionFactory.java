@@ -27,7 +27,6 @@ import crypto.CPXKey;
 import lombok.AllArgsConstructor;
 
 import java.io.IOException;
-import java.math.BigInteger;
 import java.security.interfaces.ECPrivateKey;
 import java.time.Instant;
 
@@ -37,8 +36,8 @@ public class TransactionFactory implements IProduceTransaction {
     @Override
     public Transaction create(final TxObj objType, final ECPrivateKey privateKey,
                               final ISerialize payload, final String target,
-                              final long nonce, final double amount,
-                              final double gasPrice, final long gasLimit) throws IOException {
+                              final long nonce, final FixedNumber amount,
+                              final FixedNumber gasPrice, final FixedNumber gasLimit) throws IOException {
 
         byte txType;
         switch (objType){
@@ -62,11 +61,11 @@ public class TransactionFactory implements IProduceTransaction {
                 .txType(txType)
                 .fromPubKeyHash(CPXKey.getScriptHash(privateKey))
                 .toPubKeyHash(target)
-                .amount(new FixedNumber(amount))
+                .amount(amount)
                 .nonce(nonce)
                 .data(payload.getBytes())
-                .gasPrice(new FixedNumber(gasPrice * 0.000000000001))
-                .gasLimit(BigInteger.valueOf(gasLimit))
+                .gasPrice(gasPrice)
+                .gasLimit(gasLimit.getValue())
                 .version(1)
                 .executeTime(Instant.now().toEpochMilli())
                 .build();
