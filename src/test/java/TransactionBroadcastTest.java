@@ -11,9 +11,7 @@ import message.util.RequestCallerService;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import java.math.BigInteger;
 import java.security.interfaces.ECPrivateKey;
-import java.time.Instant;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -44,10 +42,11 @@ public class TransactionBroadcastTest {
 
         final ExecResult responseAcc = writer.getObjectFromString(ExecResult.class, url.postRequest(rpc_url, getAccountCmd));
         HashMap<String, Object> responseMap = (HashMap<String, Object>) responseAcc.getResult();
-        final long nonce = (int) responseMap.get("nextNonce");
+        final long nonce = 1;
 
         final Transaction tx = txFactory.create(TxObj.TRANSFER, privateKey, () -> new byte[0],
-                toHash, nonce, 1.2, 0.0000003, 300000L);
+                toHash, nonce, new FixedNumber(1.2, FixedNumber.CPX), new FixedNumber(3, FixedNumber.KGP),
+                new FixedNumber(300, FixedNumber.KP));
 
         SendRawTransactionCmd cmd = new SendRawTransactionCmd(cryptoService.signBytes(privateKey, tx));
         ExecResult response = writer.getObjectFromString(ExecResult.class, url.postRequest(rpc_url, cmd));

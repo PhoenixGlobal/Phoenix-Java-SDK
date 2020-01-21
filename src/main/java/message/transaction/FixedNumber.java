@@ -44,23 +44,20 @@ public class FixedNumber implements ISerialize {
     public final static long ZERO_VALUE = 0L;
     public final static long MIN_VALUE = 1L;
     public final static long ONE_VALUE = 1000000000000000000L;
+    public final static BigInteger MUL = BigInteger.valueOf(1000L);
 
     public final static BigInteger P = BigInteger.valueOf(MIN_VALUE);
-    public final static BigInteger KP  = P.multiply(P);
-    public final static BigInteger MP = KP.multiply(KP);
-    public final static BigInteger GP = MP.multiply(MP);
-    public final static BigInteger KGP = GP.multiply(GP);
-    public final static BigInteger MGP = KGP.multiply(KGP);
+    public final static BigInteger KP  = P.multiply(MUL);
+    public final static BigInteger MP = KP.multiply(MUL);
+    public final static BigInteger GP = MP.multiply(MUL);
+    public final static BigInteger KGP = GP.multiply(MUL);
+    public final static BigInteger MGP = KGP.multiply(MUL);
     public final static BigInteger CPX = BigInteger.valueOf(ONE_VALUE);
 
     private BigInteger value;
 
-    public FixedNumber(BigDecimal value){
-        this.value = value.multiply(BigDecimal.valueOf(ONE_VALUE)).toBigInteger();
-    }
-
-    public FixedNumber(double value){
-        this.value = BigDecimal.valueOf(value).multiply(BigDecimal.valueOf(ONE_VALUE)).toBigInteger();
+    public FixedNumber(final double value, final BigInteger mul){
+        this.value = BigDecimal.valueOf(value).toBigInteger().multiply(mul);
     }
 
     public byte [] getBytes() throws IOException {
