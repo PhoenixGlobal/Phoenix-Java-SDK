@@ -30,7 +30,6 @@ import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.math.BigInteger;
 
 /**
  * This class wraps valid CPX amounts
@@ -44,27 +43,29 @@ public class FixedNumber implements ISerialize {
     public final static long ZERO_VALUE = 0L;
     public final static long MIN_VALUE = 1L;
     public final static long ONE_VALUE = 1000000000000000000L;
-    public final static BigInteger MUL = BigInteger.valueOf(1000L);
+    public final static BigDecimal MUL = BigDecimal.valueOf(1000L);
 
-    public final static BigInteger P = BigInteger.valueOf(MIN_VALUE);
-    public final static BigInteger KP  = P.multiply(MUL);
-    public final static BigInteger MP = KP.multiply(MUL);
-    public final static BigInteger GP = MP.multiply(MUL);
-    public final static BigInteger KGP = GP.multiply(MUL);
-    public final static BigInteger MGP = KGP.multiply(MUL);
-    public final static BigInteger CPX = BigInteger.valueOf(ONE_VALUE);
+    public final static BigDecimal P = BigDecimal.valueOf(MIN_VALUE);
+    public final static BigDecimal KP  = P.multiply(MUL);
+    public final static BigDecimal MP = KP.multiply(MUL);
+    public final static BigDecimal GP = MP.multiply(MUL);
+    public final static BigDecimal KGP = GP.multiply(MUL);
+    public final static BigDecimal MGP = KGP.multiply(MUL);
+    public final static BigDecimal CPX = BigDecimal.valueOf(ONE_VALUE);
 
-    private BigInteger value;
+    private BigDecimal value;
 
-    public FixedNumber(final double value, final BigInteger mul){
-        this.value = BigDecimal.valueOf(value).toBigInteger().multiply(mul);
+    public FixedNumber(final double value, final BigDecimal mul){
+        this.value = BigDecimal.valueOf(value).multiply(mul);
+        System.out.println(value);
+        System.out.println(this.value.toBigInteger());
     }
 
     public byte [] getBytes() throws IOException {
         try(ByteArrayOutputStream out  = new ByteArrayOutputStream()) {
             try (DataOutputStream dataOut = new DataOutputStream(out)) {
-                dataOut.write(this.value.toByteArray().length);
-                dataOut.write(this.value.toByteArray());
+                dataOut.write(this.value.toBigInteger().toByteArray().length);
+                dataOut.write(this.value.toBigInteger().toByteArray());
                 return out.toByteArray();
             }
         }
