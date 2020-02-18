@@ -57,8 +57,6 @@ public class FixedNumber implements ISerialize {
 
     public FixedNumber(final double value, final BigDecimal mul){
         this.value = BigDecimal.valueOf(value).multiply(mul);
-        System.out.println(value);
-        System.out.println(this.value.toBigInteger());
     }
 
     public byte [] getBytes() throws IOException {
