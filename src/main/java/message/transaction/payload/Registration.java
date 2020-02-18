@@ -46,7 +46,7 @@ public class Registration implements ISerialize {
 
     private String fromPubKeyHash;
 
-    private byte version;
+    private int version;
 
     private boolean genesisWitness;
 
