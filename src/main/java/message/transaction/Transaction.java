@@ -29,7 +29,7 @@ import org.bouncycastle.util.encoders.Hex;
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
-import java.math.BigInteger;
+import java.math.BigDecimal;
 
 /**
  * This class represents a Transaction object
@@ -61,7 +61,7 @@ public class Transaction implements ISerialize {
 
     private FixedNumber gasPrice;
 
-    private BigInteger gasLimit;
+    private BigDecimal gasLimit;
 
     private byte [] signature;
 
@@ -83,8 +83,8 @@ public class Transaction implements ISerialize {
                     dataOut.write(this.getData());
                 }
                 dataOut.write(this.getGasPrice().getBytes());
-                dataOut.write(this.gasLimit.toByteArray().length);
-                dataOut.write(this.gasLimit.toByteArray());
+                dataOut.write(this.gasLimit.toBigInteger().toByteArray().length);
+                dataOut.write(this.gasLimit.toBigInteger().toByteArray());
                 dataOut.writeLong(this.getExecuteTime());
                 return out.toByteArray();
             }
