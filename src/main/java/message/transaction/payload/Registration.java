@@ -78,10 +78,10 @@ public class Registration implements ISerialize {
                 dataOut.writeInt(this.version);
                 dataOut.write(Hex.decode(this.fromPubKeyHash));
                 dataOut.writeBoolean(this.genesisWitness);
-                dataOut.writeBytes(this.name);
-                dataOut.writeBytes(this.url);
-                dataOut.writeBytes(this.country);
-                dataOut.writeBytes(this.address);
+                dataOut.writeUTF(this.name);
+                dataOut.writeUTF(this.url);
+                dataOut.writeUTF(this.country);
+                dataOut.writeUTF(this.address);
                 dataOut.writeInt(this.longitude);
                 dataOut.writeInt(this.latitude);
                 dataOut.write(this.voteCounts.getBytes());
