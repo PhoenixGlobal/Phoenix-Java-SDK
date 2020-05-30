@@ -24,7 +24,6 @@ public class UInt256 implements ISerialize {
     public byte [] getBytes() throws IOException {
         try(ByteArrayOutputStream out  = new ByteArrayOutputStream()){
             try(DataOutputStream dataOut = new DataOutputStream(out)) {
-                dataOut.write(SIZE);
                 dataOut.write(value);
                 return out.toByteArray();
             }
