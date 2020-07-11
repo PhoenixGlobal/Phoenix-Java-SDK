@@ -196,24 +196,7 @@ public class CryptoService {
         return ripeMd160.digest(sha256.digest(bytes));
     }
 
-    public static byte [] getRIPEMD160(final String str) {
-        return ripeMd160.digest(sha256.digest(str.getBytes()));
-    }
-
     public static byte[] getSHA256(final byte [] bytes) {
         return sha256.digest(sha256.digest(bytes));
     }
-
-    public static byte[] getSHA256(final String str) {
-        return sha256.digest(sha256.digest(str.getBytes()));
-    }
-
-    public static byte[] getKeccak(final byte [] bytes){
-        return keccak256.digest(sha256.digest(bytes));
-    }
-
-    public static byte[] getKeccak(final String str){
-        return keccak256.digest(sha256.digest(str.getBytes()));
-    }
-
 }
