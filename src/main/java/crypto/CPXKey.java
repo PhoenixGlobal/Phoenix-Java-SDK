@@ -39,7 +39,10 @@ import java.security.interfaces.ECPrivateKey;
  * @author Artem Eger
  * @since 20.08.2019
  */
-public final class CPXKey {
+public class CPXKey {
+
+    // Hide constructor
+    private CPXKey(){}
 
     private static final byte [] CPX_PREFIX = Hex.decode("0548");
     private static final byte [] NEO_PREFIX = Hex.decode("17");
