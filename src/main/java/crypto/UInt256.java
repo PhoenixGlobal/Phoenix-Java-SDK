@@ -3,10 +3,6 @@ package crypto;
 import message.transaction.ISerialize;
 import org.bouncycastle.util.encoders.Hex;
 
-import java.io.ByteArrayOutputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
-
 public class UInt256 implements ISerialize {
 
     public final static int SIZE = 32;
@@ -21,13 +17,8 @@ public class UInt256 implements ISerialize {
         fromBytes(Hex.decode(value));
     }
 
-    public byte [] getBytes() throws IOException {
-        try(ByteArrayOutputStream out  = new ByteArrayOutputStream()){
-            try(DataOutputStream dataOut = new DataOutputStream(out)) {
-                dataOut.write(value);
-                return out.toByteArray();
-            }
-        }
+    public byte [] getBytes() {
+        return value;
     }
 
 }

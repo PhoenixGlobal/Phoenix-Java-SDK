@@ -36,11 +36,7 @@ import message.request.RequestMessageFields;
  * @author Artem Eger
  * @since 16.08.2019
  */
-@Getter
-@Setter
-@ToString
 @EqualsAndHashCode
-@NoArgsConstructor
 @AllArgsConstructor
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "name")
 public class GetBlockByIdCmd implements IRPCMessage {
@@ -49,7 +45,7 @@ public class GetBlockByIdCmd implements IRPCMessage {
      * The hash to request
      */
     @JsonProperty(RequestMessageFields.HASH)
-    @NonNull private String hash;
+    @NonNull public final String hash;
 
     /**
      * @return target RPC Endpoint for this message

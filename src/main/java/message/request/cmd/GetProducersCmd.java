@@ -36,9 +36,6 @@ import message.request.RequestMessageFields;
  * @author Artem Eger
  * @since 16.08.2019
  */
-@Getter
-@Setter
-@ToString
 @EqualsAndHashCode
 @AllArgsConstructor
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "name")
@@ -48,7 +45,7 @@ public class GetProducersCmd implements IRPCMessage {
      * The requested list type. Valid types are defined in {@link message.request.ProducerListType}
      */
     @JsonProperty(RequestMessageFields.LIST_TYPE)
-    @NonNull private String listType;
+    @NonNull public final String listType;
 
     /**
      * @return target RPC Endpoint for this message

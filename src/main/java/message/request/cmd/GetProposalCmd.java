@@ -36,11 +36,7 @@ import message.request.RequestMessageFields;
  * @author Artem Eger
  * @since 16.08.2019
  */
-@Getter
-@Setter
-@ToString
 @EqualsAndHashCode
-@NoArgsConstructor
 @AllArgsConstructor
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "name")
 public class GetProposalCmd implements IRPCMessage {
@@ -49,7 +45,7 @@ public class GetProposalCmd implements IRPCMessage {
      * The target proposal hash to request
      */
     @JsonProperty(RequestMessageFields.ID)
-    @NonNull private String proposalId;
+    @NonNull public final String proposalId;
 
     /**
      * @return target RPC Endpoint for this message

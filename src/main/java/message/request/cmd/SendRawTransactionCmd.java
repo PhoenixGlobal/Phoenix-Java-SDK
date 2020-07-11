@@ -36,11 +36,7 @@ import org.bouncycastle.util.encoders.Hex;
  * @author Artem Eger
  * @since 16.08.2019
  */
-@Getter
-@Setter
-@ToString
 @EqualsAndHashCode
-@NoArgsConstructor
 @AllArgsConstructor
 public class SendRawTransactionCmd implements IRPCMessage {
 
@@ -48,7 +44,7 @@ public class SendRawTransactionCmd implements IRPCMessage {
      * The transaction bytes
      */
     @JsonProperty(RequestMessageFields.RAW_TX)
-    @NonNull private String tx;
+    @NonNull public final String tx;
 
     /**
      * @return target RPC Endpoint for this message

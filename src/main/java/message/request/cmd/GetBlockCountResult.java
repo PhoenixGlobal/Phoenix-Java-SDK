@@ -35,11 +35,6 @@ import message.request.RequestMessageFields;
  * @author Artem Eger
  * @since 17.08.2019
  */
-@Getter
-@Setter
-@ToString
-@EqualsAndHashCode
-@NoArgsConstructor
 @AllArgsConstructor
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "name")
 public class GetBlockCountResult implements IRPCMessage {
@@ -48,7 +43,7 @@ public class GetBlockCountResult implements IRPCMessage {
      * The requested count
      */
     @JsonProperty(RequestMessageFields.COUNT)
-    @NonNull private long count;
+    @NonNull public final long count;
 
     /**
      * This message seems to not be implemented yet

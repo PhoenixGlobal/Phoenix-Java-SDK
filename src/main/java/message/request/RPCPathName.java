@@ -28,7 +28,7 @@ package message.request;
  * @author Artem Eger
  * @since 16.08.2019
  */
-public final class RPCPathName {
+public class RPCPathName {
 
     private RPCPathName(){}
 

@@ -1,12 +1,10 @@
 package crypto;
 
+import message.transaction.ISerialize;
 import org.junit.Test;
 
 import java.io.ByteArrayOutputStream;
-import java.security.KeyPair;
-import java.security.KeyStore;
-import java.security.PublicKey;
-import java.security.SecureRandom;
+import java.security.*;
 import java.security.interfaces.ECPrivateKey;
 
 import static junit.framework.TestCase.*;
@@ -18,7 +16,8 @@ public class CryptoServiceTest {
     private String rawKey = "4b92e7309619a293cd2f54fa57bd3d1754c88c77de407859c558299e6892e9a0";
     private String wif = "KykciLABWjWUShVgm3dHhAMSe4tEWi863Tk6muHosEnFnJ4THi5B";
     private String address = "APEsKZ2pYmxteuQ226VhGwb2TJKKSLdTGD4";
-    private String mnemonic = "shell scatter method illegal area bid law genius found maze hope negative kit soldier promote various power true reward success own decrease retire raven";
+    private String mnemonic = "shell scatter method illegal area bid law genius found maze hope negative kit soldier " +
+            "promote various power true reward success own decrease retire raven";
     private String mnemonicPriv = "c5780e30b880b42c1f7b075c3131b5c9f7af9d2b0f8ca95d2ae2ec29e0726dfd";
     private String password = "mypassword";
 
@@ -89,4 +88,15 @@ public class CryptoServiceTest {
         assertEquals(mnemonicPrivKey.hashCode(), privateKey.hashCode());
     }
 
+    @Test
+    public void signBytesTest() throws Exception {
+        final KeyStore keyStore = classUnderTest.generateKeyStoreFromMnemonic(password, mnemonic);
+        try(ByteArrayOutputStream out = new ByteArrayOutputStream()) {
+            keyStore.store(out, password.toCharArray());
+            KeyPair keyPair = classUnderTest.loadKeyPairFromKeyStore(out.toByteArray(), password, CryptoService.KEY_NAME);
+            final ISerialize payload = "Testpayload"::getBytes;
+            final byte[] signatureBytes = classUnderTest.signBytes(keyPair.getPrivate(), payload);
+            assertNotNull(signatureBytes);
+        }
+    }
 }

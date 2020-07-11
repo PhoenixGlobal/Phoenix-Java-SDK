@@ -34,10 +34,6 @@ import message.request.IRPCMessage;
  * @author Artem Eger
  * @since 16.08.2019
  */
-@Getter
-@Setter
-@ToString
-@EqualsAndHashCode
 @NoArgsConstructor
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "name")
 public class GetLatestBlockInfoCmd implements IRPCMessage {

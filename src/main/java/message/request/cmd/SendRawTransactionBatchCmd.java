@@ -39,9 +39,7 @@ import java.util.ArrayList;
  */
 @Getter
 @Setter
-@ToString
 @EqualsAndHashCode
-@NoArgsConstructor
 @AllArgsConstructor
 public class SendRawTransactionBatchCmd implements IRPCMessage {
 
@@ -49,7 +47,7 @@ public class SendRawTransactionBatchCmd implements IRPCMessage {
      * The tx batch
      */
     @JsonProperty(RequestMessageFields.MULTIPLE_TX)
-    @NonNull private ArrayList<SendRawTransactionCmd> batch;
+    @NonNull public final ArrayList<SendRawTransactionCmd> batch;
 
     /**
      * @return target RPC Endpoint for this message

@@ -22,8 +22,8 @@ public class SendRawTransactionCmdTest {
 
     @Test
     public void validRPCMessageFromStringTest() throws IOException {
-        final String validJsonString = "{\"rawTx\" : \"abbbe\"}";
-        final SendRawTransactionCmd classUnderTest = new SendRawTransactionCmd("abbbe");
+        final String validJsonString = "{\"rawTx\" : \"6162626265\"}";
+        final SendRawTransactionCmd classUnderTest = new SendRawTransactionCmd("abbbe".getBytes());
         final SendRawTransactionCmd msg = writer.getObjectFromString(SendRawTransactionCmd.class, validJsonString);
         assertEquals(classUnderTest, msg);
     }

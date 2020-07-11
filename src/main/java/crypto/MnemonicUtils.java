@@ -132,15 +132,6 @@ public class MnemonicUtils {
         return ((KeyParameter) gen.generateDerivedParameters(SEED_KEY_SIZE)).getKey();
     }
 
-    public static boolean validateMnemonic(String mnemonic) {
-        try {
-            generateEntropy(mnemonic);
-            return true;
-        } catch (Exception ex) {
-            return false;
-        }
-    }
-
     private static boolean isMnemonicEmpty(String mnemonic) {
         return mnemonic == null || mnemonic.trim().isEmpty();
     }

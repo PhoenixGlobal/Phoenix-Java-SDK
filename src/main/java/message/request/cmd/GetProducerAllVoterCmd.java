@@ -13,11 +13,7 @@ import message.request.RequestMessageFields;
  * @author Artem Eger
  * @since 16.08.2019
  */
-@Getter
-@Setter
-@ToString
 @EqualsAndHashCode
-@NoArgsConstructor
 @AllArgsConstructor
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "name")
 public class GetProducerAllVoterCmd implements IRPCMessage {
@@ -26,7 +22,7 @@ public class GetProducerAllVoterCmd implements IRPCMessage {
      * The target producer hash to request
      */
     @JsonProperty(RequestMessageFields.ADDRESS)
-    @NonNull private String address;
+    @NonNull public final String address;
 
     /**
      * @return target RPC Endpoint for this message

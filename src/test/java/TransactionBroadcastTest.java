@@ -29,7 +29,6 @@ public class TransactionBroadcastTest {
 
     @Test
     public void sendTransactionTest() throws Exception {
-
         final String rpc_url = "http://172.28.1.1:8080";
         final String privKeyRaw = "97b7c5875b8a5207e0cdf5b4050cb8215065ddcb36622bf733d55eca40250c39";
         final CryptoService cryptoService = new CryptoService();
@@ -52,7 +51,6 @@ public class TransactionBroadcastTest {
         ExecResult response = writer.getObjectFromString(ExecResult.class, url.postRequest(rpc_url, cmd));
         assertEquals(200, response.getStatus());
 
-        SendRawTransactionBatchCmd batch = new SendRawTransactionBatchCmd();
         ArrayList<SendRawTransactionCmd> txList = new ArrayList<>();
         tx.setNonce(tx.getNonce() + 1L);
         cmd = new SendRawTransactionCmd(cryptoService.signBytes(privateKey, tx));
@@ -60,10 +58,8 @@ public class TransactionBroadcastTest {
         tx.setNonce(tx.getNonce() + 1L);
         SendRawTransactionCmd cmd2 = new SendRawTransactionCmd(cryptoService.signBytes(privateKey, tx));
         txList.add(cmd2);
-        batch.setBatch(txList);
+        SendRawTransactionBatchCmd batch = new SendRawTransactionBatchCmd(txList);
         ExecResult responseBatch = writer.getObjectFromString(ExecResult.class, url.postRequest(rpc_url, batch));
         assertEquals(200, responseBatch.getStatus());
-
     }
-
 }

@@ -36,11 +36,7 @@ import message.request.RequestMessageFields;
  * @author Artem Eger
  * @since 16.08.2019
  */
-@Getter
-@Setter
-@ToString
 @EqualsAndHashCode
-@NoArgsConstructor
 @AllArgsConstructor
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "name")
 public class GetVotesCmd implements IRPCMessage {
@@ -49,7 +45,7 @@ public class GetVotesCmd implements IRPCMessage {
      * The target vote hash to request
      */
     @JsonProperty(RequestMessageFields.ADDRESS)
-    @NonNull private String voteId;
+    @NonNull public final String voteId;
 
     /**
      * @return target RPC Endpoint for this message

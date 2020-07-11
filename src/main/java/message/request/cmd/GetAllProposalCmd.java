@@ -35,10 +35,6 @@ import message.request.IRPCMessage;
  * @author Artem Eger
  * @since 17.08.2019
  */
-@Getter
-@Setter
-@ToString
-@EqualsAndHashCode
 @NoArgsConstructor
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "name")
 public class GetAllProposalCmd implements IRPCMessage {
