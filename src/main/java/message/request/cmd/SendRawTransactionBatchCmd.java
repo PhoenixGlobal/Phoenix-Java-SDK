@@ -30,7 +30,7 @@ import message.request.IRPCMessage;
 import message.request.RPCPathName;
 import message.request.RequestMessageFields;
 
-import java.util.ArrayList;
+import java.util.List;
 
 /**
  * This class represents a RPC message to publish a batch of new transactions
@@ -47,7 +47,7 @@ public class SendRawTransactionBatchCmd implements IRPCMessage {
      * The tx batch
      */
     @JsonProperty(RequestMessageFields.MULTIPLE_TX)
-    @NonNull public final ArrayList<SendRawTransactionCmd> batch;
+    @NonNull public final List<SendRawTransactionCmd> batch;
 
     /**
      * @return target RPC Endpoint for this message

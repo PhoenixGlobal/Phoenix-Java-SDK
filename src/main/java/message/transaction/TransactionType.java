@@ -24,19 +24,22 @@
 package message.transaction;
 
 /**
- * This class defines valid {@link Transaction} type identifiers
+ * This enum defines valid {@link Transaction} type identifiers
  * @author Artem Eger
  * @since 17.08.2019
  */
-public final class TransactionType {
+public enum TransactionType {
 
-    private TransactionType(){}
+    MINER(0x00),
+    TRANSFER(0x01),
+    DEPLOY(0x02),
+    CALL(0x03),
+    REFUND(0x04),
+    SCHEDULE(0x05);
 
-    public static final byte MINER = 0x00;
-    public static final byte TRANSFER = 0x01;
-    public static final byte DEPLOY = 0x02;
-    public static final byte CALL = 0x03;
-    public static final byte REFUND = 0x04;
-    public static final byte SCHEDULE = 0x05;
+    public final byte value;
 
+    TransactionType(final Integer value) {
+        this.value = value.byteValue();
+    }
 }

@@ -29,66 +29,67 @@ import org.bouncycastle.util.encoders.Hex;
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
-import java.math.BigDecimal;
 
 /**
  * This class represents a Transaction object
  * @author Artem Eger
  * @since 17.08.2019
  */
-@Getter
-@Setter
-@ToString
-@EqualsAndHashCode
-@Builder
-@NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class Transaction implements ISerialize {
 
-    private int version;
+    @NonNull
+    public final int version;
 
-    private byte txType;
+    @NonNull
+    public final TransactionType txType;
 
-    private String fromPubKeyHash;
+    @NonNull
+    public final String fromPubKeyHash;
 
-    private String toPubKeyHash;
+    @NonNull
+    public final String toPubKeyHash;
 
-    private FixedNumber amount;
+    @NonNull
+    public final FixedNumber amount;
 
-    private long nonce;
+    @NonNull
+    public final long nonce;
 
-    private byte [] data = new byte[1];
+    @NonNull
+    public final byte [] data;
 
-    private FixedNumber gasPrice;
+    @NonNull
+    public final FixedNumber gasPrice;
 
-    private BigDecimal gasLimit;
+    @NonNull
+    public final FixedNumber gasLimit;
 
-    private byte [] signature;
-
-    private long executeTime = 0L;
+    @NonNull
+    public final long executeTime;
 
     public byte[] getBytes() throws IOException {
         try(ByteArrayOutputStream out  = new ByteArrayOutputStream()){
             try(DataOutputStream dataOut = new DataOutputStream(out)) {
                 dataOut.writeInt(this.version);
-                dataOut.writeByte(this.txType);
+                dataOut.writeByte(this.txType.value);
                 dataOut.write(Hex.decode(this.fromPubKeyHash));
                 dataOut.write(Hex.decode(this.toPubKeyHash));
-                dataOut.write(this.getAmount().getBytes());
+                dataOut.write(this.amount.getBytes());
                 dataOut.writeLong(this.nonce);
                 if(this.data.length <= 1) {
                     dataOut.write(new byte[1]);
                 } else {
-                    dataOut.write(this.getData().length);
-                    dataOut.write(this.getData());
+                    dataOut.write(this.data.length);
+                    dataOut.write(this.data);
                 }
-                dataOut.write(this.getGasPrice().getBytes());
-                dataOut.write(this.gasLimit.toBigInteger().toByteArray().length);
-                dataOut.write(this.gasLimit.toBigInteger().toByteArray());
-                dataOut.writeLong(this.getExecuteTime());
+                dataOut.write(this.gasPrice.getBytes());
+                dataOut.write(this.gasLimit.value.toBigInteger().toByteArray().length);
+                dataOut.write(this.gasLimit.value.toBigInteger().toByteArray());
+                dataOut.writeLong(this.executeTime);
                 return out.toByteArray();
             }
         }
     }
-
 }

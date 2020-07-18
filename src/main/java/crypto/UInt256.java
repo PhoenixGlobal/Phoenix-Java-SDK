@@ -9,11 +9,19 @@ public class UInt256 implements ISerialize {
     public final static byte [] ZERO = new byte[32];
     private byte [] value;
 
-    public void fromBytes(final byte [] value){
+    public UInt256(final String value){
+        fromString(value);
+    }
+
+    public UInt256(final byte [] value){
+        fromBytes(value);
+    }
+
+    private void fromBytes(final byte [] value){
         this.value = value.length == UInt256.SIZE ? value : UInt256.ZERO;
     }
 
-    public void fromString(final String value){
+    private void fromString(final String value){
         fromBytes(Hex.decode(value));
     }
 

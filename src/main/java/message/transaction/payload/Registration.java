@@ -23,10 +23,7 @@
  */
 package message.transaction.payload;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import message.transaction.FixedNumber;
 import message.transaction.ISerialize;
 import org.bouncycastle.util.encoders.Hex;
@@ -35,8 +32,6 @@ import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
-@Getter
-@Setter
 @AllArgsConstructor
 @Builder
 public class Registration implements ISerialize {
@@ -44,31 +39,44 @@ public class Registration implements ISerialize {
     // AP1xWDozWvuVah1W86DKtcWzdw1LqCFuExk
     public static final String SCRIPT_HASH = "0000000000000000000000000000000000000101";
 
-    private String fromPubKeyHash;
+    @NonNull
+    public final String fromPubKeyHash;
 
-    private int version;
+    @NonNull
+    public final int version;
 
-    private boolean genesisWitness;
+    @NonNull
+    public final boolean genesisWitness;
 
-    private String name;
+    @NonNull
+    public final String name;
 
-    private String url;
+    @NonNull
+    public final String url;
 
-    private String country;
+    @NonNull
+    public final String country;
 
-    private String address;
+    @NonNull
+    public final String address;
 
-    private int longitude;
+    @NonNull
+    public final int longitude;
 
-    private int latitude;
+    @NonNull
+    public final int latitude;
 
-    private FixedNumber voteCounts;
+    @NonNull
+    public final FixedNumber voteCounts;
 
-    private boolean register;
+    @NonNull
+    public final boolean register;
 
-    private boolean frozen;
+    @NonNull
+    public final boolean frozen;
 
-    private byte operationType;
+    @NonNull
+    public final OperationType operationType;
 
     @Override
     public byte[] getBytes() throws IOException {
@@ -91,10 +99,9 @@ public class Registration implements ISerialize {
                 dataOut.write(this.voteCounts.getBytes());
                 dataOut.writeBoolean(this.register);
                 dataOut.writeBoolean(this.frozen);
-                dataOut.write(operationType);
+                dataOut.write(operationType.value);
                 return out.toByteArray();
             }
         }
     }
-
 }

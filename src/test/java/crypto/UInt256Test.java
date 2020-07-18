@@ -11,21 +11,19 @@ public class UInt256Test {
 
     @Test
     public void uInt256FromStringTest(){
-        final UInt256 classUnderTest = new UInt256();
-        classUnderTest.fromString(TEST_STRING);
+        final UInt256 classUnderTest = new UInt256(TEST_STRING);
+        final UInt256 classUnderTest2 = new UInt256(TEST_STRING.getBytes());
         assertEquals(Hex.toHexString(classUnderTest.getBytes()),TEST_STRING);
     }
 
     @Test(expected = DecoderException.class)
     public void uInt256FromStringFailsOnTooMuchChars(){
-        final UInt256 classUnderTest = new UInt256();
-        classUnderTest.fromString(TEST_STRING + "0");
+        final UInt256 classUnderTest = new UInt256(TEST_STRING + "0");
     }
 
     @Test(expected = DecoderException.class)
     public void uInt256FromStringInvalidWillBeZero(){
-        final UInt256 classUnderTest = new UInt256();
-        classUnderTest.fromString("NotAValidUInt256");
+        final UInt256 classUnderTest = new UInt256("NotAValidUInt256");
         assertEquals(UInt256.ZERO, classUnderTest.getBytes());
     }
 

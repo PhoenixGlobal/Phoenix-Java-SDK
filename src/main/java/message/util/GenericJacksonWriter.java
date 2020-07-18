@@ -81,5 +81,4 @@ public class GenericJacksonWriter {
     public byte[] getBytesFromRequestObject(Object msg) throws JsonProcessingException {
         return mapper.writer().writeValueAsBytes(msg);
     }
-
 }

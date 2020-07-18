@@ -1,16 +1,17 @@
 package message.response;
 
-import message.util.GenericJacksonWriter;
+import message.util.*;
 import org.junit.Test;
 
 import java.io.IOException;
 import java.util.HashMap;
 
-import static junit.framework.TestCase.assertEquals;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class ExecResultTest {
 
-    private GenericJacksonWriter writer = new GenericJacksonWriter();
+    private final GenericJacksonWriter writer = new GenericJacksonWriter();
 
     @Test
     public void validExecResultTest() throws IOException {
@@ -23,6 +24,10 @@ public class ExecResultTest {
         final String jsonString = writer.getStringFromRequestObject(classUnderTest);
         final ExecResult result = writer.getObjectFromString(ExecResult.class, jsonString);
         assertEquals(classUnderTest, result);
+        assertEquals("dummy", classUnderTest.message);
+        assertEquals(200, classUnderTest.status);
+        assertTrue(classUnderTest.succeed);
+        assertTrue(result.result.isEmpty());
     }
 
     @Test

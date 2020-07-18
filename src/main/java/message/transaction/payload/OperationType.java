@@ -28,11 +28,14 @@ package message.transaction.payload;
  * @author Artem Eger
  * @since 17.08.2019
  */
-public final class OperationType {
+public enum OperationType {
 
-    private OperationType(){}
+    REGISTER(0x00),
+    REGISTER_CANCEL(0x01);
 
-    public static final byte REGISTER = 0x00;
-    public static final byte REGISTER_CANCEL = 0x01;
+    public final byte value;
 
+    OperationType(final Integer value) {
+        this.value = value.byteValue();
+    }
 }

@@ -23,10 +23,7 @@
  */
 package message.transaction.payload;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import message.transaction.FixedNumber;
 import message.transaction.ISerialize;
 import org.bouncycastle.util.encoders.Hex;
@@ -35,8 +32,6 @@ import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
-@Getter
-@Setter
 @AllArgsConstructor
 @Builder
 public class Vote implements ISerialize {
@@ -44,11 +39,14 @@ public class Vote implements ISerialize {
     // AP1xWDozWvuVah1W86DKtcWzdw1LqMYokMU
     public static final String SCRIPT_HASH = "0000000000000000000000000000000000000102";
 
-    private String voterPubKeyHash;
+    @NonNull
+    public final String voterPubKeyHash;
 
-    private FixedNumber amount;
+    @NonNull
+    public final FixedNumber amount;
 
-    private byte operationType;
+    @NonNull
+    public final OperationType operationType;
 
     @Override
     public byte[] getBytes() throws IOException {
@@ -56,7 +54,7 @@ public class Vote implements ISerialize {
             try(DataOutputStream dataOut = new DataOutputStream(out)) {
                 dataOut.write(Hex.decode(this.voterPubKeyHash));
                 dataOut.write(this.amount.getBytes());
-                dataOut.writeByte(this.operationType);
+                dataOut.writeByte(this.operationType.value);
                 return out.toByteArray();
             }
         }

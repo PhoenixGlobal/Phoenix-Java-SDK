@@ -1,7 +1,7 @@
 package message.request.cmd;
 
 import message.request.RPCPathName;
-import message.util.GenericJacksonWriter;
+import message.util.*;
 import org.junit.Test;
 
 import java.io.IOException;

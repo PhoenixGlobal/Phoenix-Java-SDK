@@ -23,9 +23,6 @@
  */
 package message.transaction;
 
-import lombok.Getter;
-import lombok.Setter;
-
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -36,8 +33,6 @@ import java.math.BigDecimal;
  * @author Artem Eger
  * @since 26.08.2019
  */
-@Getter
-@Setter
 public class FixedNumber implements ISerialize {
 
     public final static long ZERO_VALUE = 0L;
@@ -53,7 +48,7 @@ public class FixedNumber implements ISerialize {
     public final static BigDecimal MGP = KGP.multiply(MUL);
     public final static BigDecimal CPX = BigDecimal.valueOf(ONE_VALUE);
 
-    private BigDecimal value;
+    public final BigDecimal value;
 
     public FixedNumber(final double value, final BigDecimal mul){
         this.value = BigDecimal.valueOf(value).multiply(mul);
@@ -68,5 +63,4 @@ public class FixedNumber implements ISerialize {
             }
         }
     }
-
 }

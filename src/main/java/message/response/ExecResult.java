@@ -33,25 +33,21 @@ import java.util.Map;
  * @author Artem Eger
  * @since 16.08.2019
  */
-@Getter
-@Setter
-@ToString
 @EqualsAndHashCode
 @Builder
-@NoArgsConstructor
 @AllArgsConstructor
 public class ExecResult {
 
     @JsonProperty(ResponseMessageFields.SUCCEED)
-    @NonNull private boolean succeed;
+    @NonNull public final boolean succeed;
 
     @JsonProperty(ResponseMessageFields.STATUS)
-    @NonNull private int status;
+    @NonNull public final int status;
 
     @JsonProperty(ResponseMessageFields.MESSAGE)
-    @NonNull private String message;
+    @NonNull public final String message;
 
     @JsonProperty(ResponseMessageFields.RESULT)
-    @NonNull private Map<String, Object> result;
+    @NonNull public final Map<String, Object> result;
 
 }
