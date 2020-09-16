@@ -78,6 +78,9 @@ public class Registration implements ISerialize {
     @NonNull
     public final OperationType operationType;
 
+    @NonNull
+    public final String ownerPubKeyHash;
+
     @Override
     public byte[] getBytes() throws IOException {
         try(ByteArrayOutputStream out  = new ByteArrayOutputStream()){
@@ -99,6 +102,7 @@ public class Registration implements ISerialize {
                 dataOut.write(this.voteCounts.getBytes());
                 dataOut.writeBoolean(this.register);
                 dataOut.writeBoolean(this.frozen);
+                dataOut.write(Hex.decode(this.ownerPubKeyHash));
                 dataOut.write(operationType.value);
                 return out.toByteArray();
             }

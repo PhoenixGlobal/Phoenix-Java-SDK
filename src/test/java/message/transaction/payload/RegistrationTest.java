@@ -26,6 +26,7 @@ public class RegistrationTest {
                 .register(true)
                 .frozen(false)
                 .genesisWitness(false)
+                .ownerPubKeyHash(CPXKey.getScriptHashFromCPXAddress("APEt5ThLdoXiMGQkDmGnfY271vJrii5LxxM"))
                 .build();
         final Registration classUnderTest2 = Registration.builder()
                 .version(1)
@@ -41,6 +42,7 @@ public class RegistrationTest {
                 .register(true)
                 .frozen(false)
                 .genesisWitness(false)
+                .ownerPubKeyHash(CPXKey.getScriptHashFromCPXAddress("APEt5ThLdoXiMGQkDmGnfY271vJrii5LxxM"))
                 .build();
         assertEquals(Hex.toHexString(classUnderTest.getBytes()), Hex.toHexString(classUnderTest2.getBytes()));
     }
