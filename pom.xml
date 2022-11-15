@@ -34,7 +34,7 @@
     <properties>
         <logback.version>1.2.3</logback.version>
         <lombock.version>1.18.8</lombock.version>
-        <jackson.version>2.10.0</jackson.version>
+        <jackson.version>2.12.7.1</jackson.version>
         <jackson.databind.version>2.9.9.3</jackson.databind.version>
         <bouncycastle.version>1.62</bouncycastle.version>
         <junit.version>4.13.1</junit.version>
